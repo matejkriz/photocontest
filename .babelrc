@@ -1,0 +1,12 @@
+{
+  "env": {
+    "development": {
+      "presets": ["next/babel", "@zeit/next-typescript/babel"],
+      "plugins": ["@babel/plugin-transform-runtime", "inline-dotenv"]
+    },
+    "production": {
+      "presets": ["next/babel", "@zeit/next-typescript/babel"],
+      "plugins": ["transform-node-env-inline"]
+    }
+  }
+}

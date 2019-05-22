@@ -1,0 +1,45 @@
+# system files
+.DS_Store
+
+# next
+.next
+
+# IDEs
+.idea/
+.project/
+.vscode/
+*.swp
+
+# cache files for sublime text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+# packaging systems files
+node_modules
+
+# Logs
+logs
+*.log
+*.log.*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# enviroment
+.env*
+!.env.dev
+
+#storybook
+.storybook/.build
+.bundlesAnalysis
+
+# Orig files
+*.orig
+
+pre-commit-hook.sh
