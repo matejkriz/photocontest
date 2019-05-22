@@ -11,6 +11,7 @@ const withCSS = require('@zeit/next-css');
 
 module.exports = withCSS(
   withTypescript({
+    target: 'serverless',
     webpack: config => {
       config.plugins = config.plugins || [];
 
@@ -24,9 +25,6 @@ module.exports = withCSS(
       ];
 
       return config;
-    },
-    publicRuntimeConfig: {
-      mainPath: process.env.MAIN_PATH,
     },
   }),
 );

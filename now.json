@@ -1,0 +1,6 @@
+{
+  "name": "photocontest",
+  "version": 2,
+  "alias": ["uragan-fotosoutez"],
+  "builds": [{ "src": "next.config.js", "use": "@now/next" }]
+}
