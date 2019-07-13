@@ -1,9 +1,11 @@
-import App, { Container } from 'next/app';
 import React from 'react';
+import App, { Container } from 'next/app';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { breakpoints } from '../theme/breakpoints';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
+
+import { firebaseConfig } from '../config/default';
 
 interface MyAppProps {
   Component: any;
@@ -11,6 +13,13 @@ interface MyAppProps {
 }
 
 export default class MyApp extends App<MyAppProps> {
+  componentDidMount() {
+    const firebase = require('firebase/app');
+    firebase.initializeApp(firebaseConfig);
+
+    // firebaseui needs it on global window object
+    (window as any).firebase = firebase;
+  }
   render() {
     const { Component, pageProps } = this.props;
 
