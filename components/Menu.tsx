@@ -7,7 +7,7 @@ import { FirebaseType } from './Firebase';
 
 interface Props {
   router: SingletonRouter;
-  firebase: FirebaseType;
+  firebase?: FirebaseType;
 }
 
 const MenuComponent = ({ router, firebase }: Props) => {
@@ -28,7 +28,7 @@ const MenuComponent = ({ router, firebase }: Props) => {
         </MenuUI.Item>
       </Link>
       <MenuUI.Menu position="right">
-        {user.isSignedIn ? (
+        {user.isSignedIn && firebase ? (
           <MenuUI.Item onClick={() => firebase.auth().signOut()}>
             Odhlásit
           </MenuUI.Item>

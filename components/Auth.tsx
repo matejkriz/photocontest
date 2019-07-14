@@ -68,16 +68,6 @@ export function Auth() {
           if (!userAuth && user.isSignedIn) {
             firebaseUiWidget.reset();
           }
-          dispatch({
-            type: ActionType.authStateChanged,
-            user: userAuth
-              ? {
-                  isSignedIn: true,
-                  email: `${userAuth.email}`,
-                  name: '',
-                }
-              : initialUserState,
-          });
         });
       return () => {
         // Clean up the subscription

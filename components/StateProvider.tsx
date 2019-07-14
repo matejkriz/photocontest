@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useReducer, Dispatch } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  Dispatch,
+} from 'react';
 import { initialUserState, userReducer } from './Auth';
+import { FirebaseType } from './Firebase';
 
 export interface State {
   user: {
@@ -31,10 +38,42 @@ export const StateContext = createContext((undefined as unknown) as [
   Dispatch<Action>
 ]);
 
-export const StateProvider: React.FunctionComponent = ({ children }) => (
-  <StateContext.Provider value={useReducer(reducer, initialState)}>
-    {children}
-  </StateContext.Provider>
-);
+interface Props {
+  firebase?: FirebaseType;
+}
+
+export const StateProvider: React.FunctionComponent<Props> = ({
+  children,
+  firebase,
+}) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  useEffect(() => {
+    if (firebase) {
+      const unregisterAuthObserver = firebase
+        .auth()
+        .onAuthStateChanged(userAuth => {
+          dispatch({
+            type: ActionType.authStateChanged,
+            user: userAuth
+              ? {
+                  isSignedIn: true,
+                  email: `${userAuth.email}`,
+                  name: '',
+                }
+              : initialUserState,
+          });
+        });
+      return () => {
+        unregisterAuthObserver();
+      };
+    }
+  }, [firebase]);
+
+  return (
+    <StateContext.Provider value={[state, dispatch]}>
+      {children}
+    </StateContext.Provider>
+  );
+};
 
 export const useStateValue = () => useContext(StateContext);

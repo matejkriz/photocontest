@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { firebaseConfig } from '../config/default';
 import firebase from 'firebase/app';
 
@@ -7,13 +7,19 @@ export type FirebaseType = typeof firebase;
 export const Firebase = ({
   children,
 }: {
-  children: (props: FirebaseType) => JSX.Element;
+  children: (props?: FirebaseType) => JSX.Element;
 }) => {
+  const [, forceUpdate] = useState();
+  const firebaseInitialized = useRef<typeof firebase>();
   useEffect(() => {
-    firebase.initializeApp(firebaseConfig);
-
-    // firebaseui needs it on global window object
-    (window as any).firebase = firebase;
+    if (!firebaseInitialized.current) {
+      firebase.initializeApp(firebaseConfig);
+      firebaseInitialized.current = firebase;
+      // firebaseui needs it on global window object
+      (window as any).firebase = firebase;
+      forceUpdate({}); // rerender children when firebase is initialized
+    }
   }, []);
-  return children(firebase);
+
+  return children(firebaseInitialized.current);
 };

@@ -22,7 +22,7 @@ class MyApp extends App<MyAppProps> {
         <ErrorBoundary>
           <Firebase>
             {firebase => (
-              <StateProvider>
+              <StateProvider firebase={firebase}>
                 <Menu firebase={firebase} />
                 <Component {...pageProps} />
               </StateProvider>
