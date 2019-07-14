@@ -1,75 +1,33 @@
 import React from 'react';
 import App, { Container } from 'next/app';
-import Link from 'next/link';
-import { withRouter, SingletonRouter } from 'next/router';
-import { StateProvider, StateContext } from '../components/StateProvider';
+import { Firebase } from '../components/Firebase';
+import { Menu } from '../components/Menu';
+import { StateProvider } from '../components/StateProvider';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { breakpoints } from '../theme/breakpoints';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
-import { Menu } from 'semantic-ui-react';
-
-import { firebaseConfig } from '../config/default';
 
 interface MyAppProps {
   Component: any;
   pageProps: any;
-  router: SingletonRouter;
 }
 
 class MyApp extends App<MyAppProps> {
-  firebase: any;
-
-  componentDidMount() {
-    this.firebase = require('firebase/app');
-    this.firebase.initializeApp(firebaseConfig);
-
-    // firebaseui needs it on global window object
-    (window as any).firebase = this.firebase;
-  }
   render() {
-    const { Component, pageProps, router } = this.props;
+    const { Component, pageProps } = this.props;
 
     return (
       <Container>
         <ErrorBoundary>
-          <StateProvider>
-            <Menu pointing secondary inverted>
-              <Link href="/" passHref>
-                <Menu.Item active={router.pathname === '/'}>Pravidla</Menu.Item>
-              </Link>
-              <Link href="/vote" passHref>
-                <Menu.Item active={router.pathname.startsWith('/vote')}>
-                  Hlasovat
-                </Menu.Item>
-              </Link>
-              <Link href="/upload" passHref>
-                <Menu.Item active={router.pathname.startsWith('/upload')}>
-                  Nahrát fotky
-                </Menu.Item>
-              </Link>
-              <Menu.Menu position="right">
-                <StateContext.Consumer>
-                  {([{ user }]) =>
-                    user.isSignedIn ? (
-                      <Menu.Item onClick={() => this.firebase.auth().signOut()}>
-                        Odhlásit
-                      </Menu.Item>
-                    ) : (
-                      <Link href="/login" passHref>
-                        <Menu.Item
-                          active={router.pathname.startsWith('/login')}
-                        >
-                          Přihlásit
-                        </Menu.Item>
-                      </Link>
-                    )
-                  }
-                </StateContext.Consumer>
-              </Menu.Menu>
-            </Menu>
-            <Component {...pageProps} />
-          </StateProvider>
+          <Firebase>
+            {firebase => (
+              <StateProvider>
+                <Menu firebase={firebase} />
+                <Component {...pageProps} />
+              </StateProvider>
+            )}
+          </Firebase>
         </ErrorBoundary>
 
         <style jsx global>
@@ -108,4 +66,4 @@ class MyApp extends App<MyAppProps> {
   }
 }
 
-export default withRouter(MyApp);
+export default MyApp;
