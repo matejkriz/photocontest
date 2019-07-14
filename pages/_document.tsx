@@ -7,7 +7,6 @@ declare global {
   }
 }
 
-
 export default class MyDocument extends Document {
   render() {
     return (
@@ -32,6 +31,10 @@ export default class MyDocument extends Document {
             type="text/css"
             rel="stylesheet"
             href="https://www.gstatic.com/firebasejs/ui/4.0.0/firebase-ui-auth.css"
+          />
+          <link
+            rel="stylesheet"
+            href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
           />
         </Head>
         <body>
