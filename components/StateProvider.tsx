@@ -6,6 +6,7 @@ import React, {
   Dispatch,
 } from 'react';
 import { initialUserState, userReducer } from './Auth';
+import { fileReducer } from './Dropzone';
 import { FirebaseType } from './Firebase';
 
 export interface State {
@@ -14,6 +15,7 @@ export interface State {
     email: string;
     name: string;
   };
+  uploadedFiles: Array<string>;
 }
 
 export interface Action {
@@ -23,14 +25,17 @@ export interface Action {
 
 export enum ActionType {
   authStateChanged = 'authStateChanged',
+  fileUploaded = 'fileUploaded',
 }
 
 export const initialState = {
   user: { ...initialUserState },
+  uploadedFiles: [],
 };
 
 const reducer = (state: State, action: Action) => ({
   user: userReducer(state, action),
+  uploadedFiles: fileReducer(state, action),
 });
 
 export const StateContext = createContext((undefined as unknown) as [

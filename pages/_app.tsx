@@ -24,7 +24,7 @@ class MyApp extends App<MyAppProps> {
             {firebase => (
               <StateProvider firebase={firebase}>
                 <Menu firebase={firebase} />
-                <Component {...pageProps} />
+                <Component firebase={firebase} {...pageProps} />
               </StateProvider>
             )}
           </Firebase>
