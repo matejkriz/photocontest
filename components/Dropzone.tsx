@@ -7,10 +7,10 @@ import {
   Segment,
   Progress,
   Message,
-  Image,
 } from 'semantic-ui-react';
 import { Action, ActionType, State, useStateValue } from './StateProvider';
 import { FirebaseType } from './Firebase';
+import { FirebaseError } from 'firebase/app';
 
 interface Props {
   firebase: FirebaseType;
@@ -37,15 +37,14 @@ export function Dropzone({ firebase }: Props) {
   const [progress, setProgress] = useState(0);
   const [progressState, setProgressState] = useState(ProgressStates.inactive);
   const [error, setError] = useState('');
-  const [{ uploadedFiles }, dispatch] = useStateValue();
+  const [{}, dispatch] = useStateValue();
 
-  const handleSuccess = (uploadTask: firebase.storage.UploadTask) => {
+  const handleSuccess = async (uploadTask: firebase.storage.UploadTask) => {
     // Upload completed successfully, now we can get the download URL
-    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL: string) => {
-      dispatch({
-        type: ActionType.fileUploaded,
-        fileUrl: downloadURL,
-      });
+    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+    dispatch({
+      type: ActionType.fileUploaded,
+      fileUrl: downloadURL,
     });
   };
 
@@ -65,7 +64,7 @@ export function Dropzone({ firebase }: Props) {
     }
   };
 
-  const handleError = (error: Error) => {
+  const handleError = (error: FirebaseError) => {
     setError(error.message);
     // A full list of error codes is available at
     // https://firebase.google.com/docs/storage/web/handle-errors
@@ -108,6 +107,7 @@ export function Dropzone({ firebase }: Props) {
           uploadTask.on(
             firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
             handleSnapshot,
+            // @ts-ignore wrong fireabse typing
             handleError,
             () => handleSuccess(uploadTask),
           );
@@ -147,10 +147,6 @@ export function Dropzone({ firebase }: Props) {
           <Message.Header>{error}</Message.Header>
         </Message>
       )}
-      {!!uploadedFiles.length &&
-        uploadedFiles.map((url, index) => (
-          <Image key={index.toString()} src={url} size="medium" />
-        ))}
     </div>
   );
 }
