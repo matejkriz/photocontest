@@ -8,19 +8,15 @@ import React, {
 import 'firebase/firestore';
 import { FirebaseType } from '../components/Firebase';
 import { Photo } from '../components/StateProvider';
-import { Image, Message } from 'semantic-ui-react';
+import { Gallery } from '../components/Gallery';
 
 interface Props {
   firebase?: FirebaseType;
 }
 
-interface PhotoWithId extends Photo {
-  uid: string;
-}
-
 async function fetchPhotos(
   firebase: FirebaseType,
-  photos: MutableRefObject<Array<PhotoWithId>>,
+  photos: MutableRefObject<Array<Photo>>,
   forceUpdate: Dispatch<any>,
 ) {
   const db = await firebase.firestore();
@@ -37,7 +33,7 @@ async function fetchPhotos(
 
 const VotingPage = ({ firebase }: Props) => {
   const [, forceUpdate] = useState();
-  const photos = useRef<Array<PhotoWithId>>([]);
+  const photos = useRef<Array<Photo>>([]);
   useEffect(() => {
     if (firebase) {
       fetchPhotos(firebase, photos, forceUpdate);
@@ -46,16 +42,7 @@ const VotingPage = ({ firebase }: Props) => {
   return (
     <div>
       <h1>Hlasování</h1>
-      <ul>
-        {photos.current.map(photo => (
-          <li key={photo.uid}>
-            <Image src={decodeURIComponent(photo.url)} />
-            <Message>
-              <p>{photo.description}</p>
-            </Message>
-          </li>
-        ))}
-      </ul>
+      <Gallery photos={photos.current} />
     </div>
   );
 };

@@ -41,6 +41,7 @@ export enum ProgressStates {
 }
 
 export interface Photo {
+  uid?: string;
   url: string;
   name: string;
   progress: number;
