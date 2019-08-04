@@ -29,8 +29,8 @@ export interface Action {
 export enum ActionType {
   authStateChanged = 'authStateChanged',
   fileUploaded = 'fileUploaded',
-  progressUpdate = 'progressUpdate',
   progressStateUpdate = 'progressStateUpdate',
+  progressUpdate = 'progressUpdate',
 }
 
 export enum ProgressStates {

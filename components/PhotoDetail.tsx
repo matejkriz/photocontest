@@ -4,20 +4,15 @@ import { Item, Form, Button, Progress } from 'semantic-ui-react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useStateValue, Photo, ProgressStates } from './StateProvider';
-
-const categories = [
-  { key: 'a', value: 'humor', text: 'Humor' },
-  { key: 'b', value: 'dobrodruzstvi', text: 'Dobrodružství' },
-  { key: 'c', value: 'zlomove_okamziky', text: 'Zlomové okamžiky' },
-  { key: 'd', value: 'pratelstvi', text: 'Přátelství' },
-];
+import { Categories } from './Categories';
 
 interface Props {
   uuid: string;
   photo: Photo;
+  categories: Categories;
 }
 
-export const PhotoDetail = ({ uuid, photo, ...props }: Props) => {
+export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
   const [{ user }] = useStateValue();
   const { url, progress, progressState, name } = photo;
   return (
