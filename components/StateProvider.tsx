@@ -45,6 +45,9 @@ export interface Photo {
   name: string;
   progress: number;
   progressState: ProgressStates;
+  category?: string;
+  description?: string;
+  author?: string;
 }
 
 export const initialState = {

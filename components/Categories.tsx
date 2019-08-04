@@ -1,9 +1,27 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, MutableRefObject, Dispatch } from 'react';
 import { FirebaseType } from './Firebase';
 
 import 'firebase/firestore';
 
 export type Categories = Array<{ key: string; value: string; text: string }>;
+
+async function fetchCategories(
+  firebase: FirebaseType,
+  categories: MutableRefObject<Categories>,
+  forceUpdate: Dispatch<any>,
+) {
+  const db = await firebase.firestore();
+  const categoriesRef = await db.collection('categories');
+  const snapshot = await categoriesRef.get();
+
+  categories.current = snapshot.docs.map(doc => ({
+    key: doc.id,
+    value: doc.id,
+    text: doc.data().label,
+  }));
+
+  forceUpdate({}); // rerender children
+}
 
 export const Categories = ({
   children,
@@ -15,21 +33,8 @@ export const Categories = ({
   const [, forceUpdate] = useState();
   const categories = useRef<Categories>([]);
   useEffect(() => {
-    async function fetchCategories(firebase: FirebaseType) {
-      const db = await firebase.firestore();
-      const categoriesRef = await db.collection('categories');
-      const snapshot = await categoriesRef.get();
-
-      categories.current = snapshot.docs.map(doc => ({
-        key: doc.id,
-        value: doc.id,
-        text: doc.data().label,
-      }));
-
-      forceUpdate({}); // rerender children
-    }
     if (firebase) {
-      fetchCategories(firebase);
+      fetchCategories(firebase, categories, forceUpdate);
     }
   }, [firebase]);
 
