@@ -48,7 +48,7 @@ export const initialUserState = {
 };
 
 export function Auth() {
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   useEffect(() => {
     // Wait in case the firebase UI instance is being deleted.
