@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { firebaseConfig } from '../config/default';
 import firebase from 'firebase/app';
-import 'firebase/storage';
 
 export type FirebaseType = typeof firebase;
 

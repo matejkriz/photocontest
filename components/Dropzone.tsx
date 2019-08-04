@@ -1,65 +1,104 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { Button, Header, Icon, Segment, Message } from 'semantic-ui-react';
 import {
-  Button,
-  Header,
-  Icon,
-  Segment,
-  Progress,
-  Message,
-} from 'semantic-ui-react';
-import { Action, ActionType, State, useStateValue } from './StateProvider';
-import { FirebaseType } from './Firebase';
-import { FirebaseError } from 'firebase/app';
-
-interface Props {
-  firebase: FirebaseType;
-}
-
-enum ProgressStates {
-  inactive = 'inactive',
-  active = 'active',
-  paused = 'paused',
-  error = 'error',
-}
+  Action,
+  ActionType,
+  State,
+  useStateValue,
+  ProgressStates,
+} from './StateProvider';
+import { getUUID } from '../lib/uuid';
+import 'firebase/storage';
+import firebase, { FirebaseError } from 'firebase/app';
 
 export const fileReducer = (state: State, action: Action) => {
   switch (action.type) {
-    case ActionType.fileUploaded:
-      return [...state.uploadedFiles, action.fileUrl];
+    case ActionType.fileUploaded: {
+      const { uuid, name, url } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        [uuid]: { ...state.uploadedFiles[uuid], url, name },
+      };
+    }
+    case ActionType.progressUpdate: {
+      const { uuid, progress } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        [uuid]: { ...state.uploadedFiles[uuid], progress },
+      };
+    }
+    case ActionType.progressStateUpdate: {
+      const { uuid, progressState } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        [uuid]: { ...state.uploadedFiles[uuid], progressState },
+      };
+    }
 
     default:
       return state.uploadedFiles;
   }
 };
 
-export function Dropzone({ firebase }: Props) {
-  const [progress, setProgress] = useState(0);
-  const [progressState, setProgressState] = useState(ProgressStates.inactive);
+export function Dropzone() {
   const [error, setError] = useState('');
   const [{}, dispatch] = useStateValue();
 
-  const handleSuccess = async (uploadTask: firebase.storage.UploadTask) => {
+  const handleSuccess = async ({
+    uuid,
+    name,
+    uploadTask,
+  }: {
+    uuid: string;
+    name: string;
+    uploadTask: firebase.storage.UploadTask;
+  }) => {
     // Upload completed successfully, now we can get the download URL
     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
     dispatch({
       type: ActionType.fileUploaded,
-      fileUrl: downloadURL,
+      payload: {
+        uuid,
+        name,
+        url: encodeURIComponent(downloadURL),
+      },
     });
   };
 
-  const handleSnapshot = (snapshot: firebase.storage.UploadTaskSnapshot) => {
+  const handleSnapshot = ({
+    uuid,
+    bytesTransferred,
+    totalBytes,
+    state,
+  }: { uuid: string } & firebase.storage.UploadTaskSnapshot) => {
     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-    setProgress(
-      Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100),
-    );
+    dispatch({
+      type: ActionType.progressUpdate,
+      payload: {
+        uuid,
+        progress: Math.round((bytesTransferred / totalBytes) * 100),
+      },
+    });
 
-    switch (snapshot.state) {
+    switch (state) {
       case firebase.storage.TaskState.PAUSED:
-        setProgressState(ProgressStates.paused);
+        dispatch({
+          type: ActionType.progressStateUpdate,
+          payload: {
+            uuid,
+            progressState: ProgressStates.paused,
+          },
+        });
         break;
       case firebase.storage.TaskState.RUNNING:
-        setProgressState(ProgressStates.active);
+        dispatch({
+          type: ActionType.progressStateUpdate,
+          payload: {
+            uuid,
+            progressState: ProgressStates.active,
+          },
+        });
         break;
     }
   };
@@ -93,23 +132,24 @@ export function Dropzone({ firebase }: Props) {
       }>,
     ) => {
       if (firebase) {
-        var storageRef = firebase.storage().ref();
+        const storageRef = firebase.storage().ref();
         const reader = new FileReader();
 
         reader.onabort = () => console.log('file reading was aborted');
         reader.onerror = () => console.log('file reading has failed');
 
         acceptedFiles.forEach(file => {
+          const uuid = getUUID();
           // Upload file and metadata to the object 'images/mountains.jpg'
-          var uploadTask = storageRef.child('photos/' + file.name).put(file);
+          const uploadTask = storageRef.child(`photos/${uuid}`).put(file);
 
           // Listen for state changes, errors, and completion of the upload.
           uploadTask.on(
             firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-            handleSnapshot,
+            ownProps => handleSnapshot({ ...ownProps, uuid }),
             // @ts-ignore wrong fireabse typing
             handleError,
-            () => handleSuccess(uploadTask),
+            () => handleSuccess({ uuid, name: file.name, uploadTask }),
           );
         });
       }
@@ -129,19 +169,10 @@ export function Dropzone({ firebase }: Props) {
             ? 'Přetáhněte soubory sem...'
             : 'Nahrajte fotky do soutěže.'}
         </Header>
-        <Button inverted color="yellow" primary size="massive">
+        <Button inverted color="yellow" size="massive">
           Vybrat soubory
         </Button>
       </Segment>
-      {progressState !== ProgressStates.inactive && (
-        <Progress
-          percent={progress}
-          progress
-          success={progress === 100}
-          disabled={progressState === ProgressStates.paused}
-          error={progressState === ProgressStates.error}
-        />
-      )}
       {error && (
         <Message negative>
           <Message.Header>{error}</Message.Header>

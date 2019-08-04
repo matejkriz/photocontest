@@ -45,6 +45,7 @@ export const initialUserState = {
   isSignedIn: false,
   email: '',
   name: '',
+  uid: '',
 };
 
 export function Auth() {

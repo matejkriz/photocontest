@@ -14,8 +14,11 @@ export interface State {
     isSignedIn: boolean;
     email: string;
     name: string;
+    uid: string;
   };
-  uploadedFiles: Array<string>;
+  uploadedFiles: {
+    [uuid: string]: Photo;
+  };
 }
 
 export interface Action {
@@ -26,11 +29,27 @@ export interface Action {
 export enum ActionType {
   authStateChanged = 'authStateChanged',
   fileUploaded = 'fileUploaded',
+  progressUpdate = 'progressUpdate',
+  progressStateUpdate = 'progressStateUpdate',
+}
+
+export enum ProgressStates {
+  inactive = 'inactive',
+  active = 'active',
+  paused = 'paused',
+  error = 'error',
+}
+
+export interface Photo {
+  url: string;
+  name: string;
+  progress: number;
+  progressState: ProgressStates;
 }
 
 export const initialState = {
   user: { ...initialUserState },
-  uploadedFiles: [],
+  uploadedFiles: {},
 };
 
 const reducer = (state: State, action: Action) => ({
@@ -64,6 +83,7 @@ export const StateProvider: React.FunctionComponent<Props> = ({
                   isSignedIn: true,
                   email: `${userAuth.email}`,
                   name: '',
+                  uid: userAuth.uid,
                 }
               : initialUserState,
           });

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Formik, Field, FieldProps } from 'formik';
-import { Item, Form, Button } from 'semantic-ui-react';
+import { Item, Form, Button, Progress } from 'semantic-ui-react';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import { useStateValue, Photo, ProgressStates } from './StateProvider';
 
 const categories = [
   { key: 'a', value: 'humor', text: 'Humor' },
@@ -10,25 +13,45 @@ const categories = [
 ];
 
 interface Props {
-  url: string;
+  uuid: string;
+  photo: Photo;
 }
 
-export const PhotoDetail = ({ url, ...props }: Props) => {
+export const PhotoDetail = ({ uuid, photo, ...props }: Props) => {
+  const [{ user }] = useStateValue();
+  const { url, progress, progressState, name } = photo;
   return (
     <Item {...props}>
-      <Item.Image src={url} />
+      <Item.Image src={decodeURIComponent(url)} label={name} />
       <Item.Content>
+        {progressState !== ProgressStates.inactive && (
+          <Progress
+            percent={progress}
+            progress
+            success={progress === 100}
+            disabled={progressState === ProgressStates.paused}
+            error={progressState === ProgressStates.error}
+          />
+        )}
         <Formik
           initialValues={{
             category: undefined,
             description: '',
             author: '',
           }}
-          onSubmit={(values, actions) => {
-            console.log(
-              'JSON.stringify(values, null, 2): ',
-              JSON.stringify(values, null, 2),
-            );
+          onSubmit={async ({ category, description, author }, actions) => {
+            await firebase
+              .firestore()
+              .collection('photos')
+              .doc(uuid)
+              .set({
+                category,
+                description,
+                author,
+                user: user.uid,
+                name,
+                url,
+              });
             actions.setSubmitting(false);
           }}
           render={({ handleSubmit, isSubmitting }) => (
@@ -69,7 +92,7 @@ export const PhotoDetail = ({ url, ...props }: Props) => {
                   </Form.Field>
                 )}
               />
-              <Button color="blue" type="submit" disabled={isSubmitting}>
+              <Button color="yellow" type="submit" disabled={isSubmitting}>
                 Uložit
               </Button>
             </Form>
