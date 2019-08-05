@@ -16,7 +16,7 @@ module.exports = withCSS({
       ...config.plugins,
 
       new Dotenv({
-        path: path.join(__dirname, '.env'),
+        path: path.join(__dirname, '.env.build'),
         systemvars: true,
       }),
     ];

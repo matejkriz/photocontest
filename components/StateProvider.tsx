@@ -5,7 +5,7 @@ import React, {
   useEffect,
   Dispatch,
 } from 'react';
-import { initialUserState, userReducer } from './Auth';
+import { userReducer } from './Auth';
 import { fileReducer } from './Dropzone';
 import { FirebaseType } from './Firebase';
 
@@ -50,6 +50,13 @@ export interface Photo {
   description?: string;
   author?: string;
 }
+
+export const initialUserState = {
+  isSignedIn: false,
+  email: '',
+  name: '',
+  uid: '',
+};
 
 export const initialState = {
   user: { ...initialUserState },

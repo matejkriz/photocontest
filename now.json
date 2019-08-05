@@ -2,5 +2,16 @@
   "name": "photocontest",
   "version": 2,
   "alias": ["uragan-fotosoutez"],
-  "builds": [{ "src": "next.config.js", "use": "@now/next" }]
+  "builds": [{ "src": "next.config.js", "use": "@now/next" }],
+  "build": {
+    "env": {
+      "API_KEY": "@apiKey",
+      "AUTH_DOMAIN": "@authDomain",
+      "DATABASE_URL": "@databaseURL",
+      "PROJECT_ID": "@projectId",
+      "STORAGE_BUCKET": "@storageBucket",
+      "MESSAGING_SENDER_ID": "@messagingSenderId",
+      "APP_ID": "@appId"
+    }
+  }
 }

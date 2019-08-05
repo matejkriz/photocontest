@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-import { firebaseConfig } from '../config/default';
 import firebase from 'firebase/app';
 
 export type FirebaseType = typeof firebase;
@@ -13,7 +12,15 @@ export const Firebase = ({
   const firebaseInitialized = useRef<typeof firebase>();
   useEffect(() => {
     if (!firebaseInitialized.current) {
-      firebase.initializeApp(firebaseConfig);
+      firebase.initializeApp({
+        apiKey: process.env.API_KEY,
+        authDomain: process.env.AUTH_DOMAIN,
+        databaseURL: process.env.DATABASE_URL,
+        projectId: process.env.PROJECT_ID,
+        storageBucket: process.env.STORAGE_BUCKET,
+        messagingSenderId: process.env.MESSAGING_SENDER_ID,
+        appId: process.env.APP_ID,
+      });
       firebaseInitialized.current = firebase;
       // firebaseui needs it on global window object
       (window as any).firebase = firebase;
