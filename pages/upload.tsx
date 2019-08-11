@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item } from 'semantic-ui-react';
+import { Container, Item } from 'semantic-ui-react';
 import { Categories } from '../components/Categories';
 import { Dropzone } from '../components/Dropzone';
 import { FirebaseType } from '../components/Firebase';
@@ -14,8 +14,7 @@ const UploadPage = ({ firebase }: Props) => {
   const [{ uploadedFiles }] = useStateValue();
 
   return (
-    <div>
-      <h1>Nahrávání fotek</h1>
+    <Container>
       <Dropzone />
       <Categories firebase={firebase}>
         {categories => (
@@ -31,7 +30,7 @@ const UploadPage = ({ firebase }: Props) => {
           </Item.Group>
         )}
       </Categories>
-    </div>
+    </Container>
   );
 };
 

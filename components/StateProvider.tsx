@@ -46,7 +46,7 @@ export interface Photo {
   name: string;
   progress: number;
   progressState: ProgressStates;
-  category?: string;
+  category: string;
   description?: string;
   author?: string;
 }
