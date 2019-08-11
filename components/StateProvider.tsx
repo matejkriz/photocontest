@@ -5,17 +5,18 @@ import React, {
   useEffect,
   Dispatch,
 } from 'react';
-import { userReducer } from './Auth';
-import { fileReducer } from './Dropzone';
 import { FirebaseType } from './Firebase';
+import 'firebase/auth';
+
+export interface User {
+  isSignedIn: boolean;
+  email: string;
+  name: string;
+  uid: string;
+}
 
 export interface State {
-  user: {
-    isSignedIn: boolean;
-    email: string;
-    name: string;
-    uid: string;
-  };
+  user: User;
   uploadedFiles: {
     [uuid: string]: Photo;
   };
@@ -31,6 +32,7 @@ export enum ActionType {
   fileUploaded = 'fileUploaded',
   progressStateUpdate = 'progressStateUpdate',
   progressUpdate = 'progressUpdate',
+  uploadedPhotosFetched = 'uploadedPhotosFetched',
 }
 
 export enum ProgressStates {
@@ -44,8 +46,8 @@ export interface Photo {
   uid?: string;
   url: string;
   name: string;
-  progress: number;
-  progressState: ProgressStates;
+  progress?: number;
+  progressState?: ProgressStates;
   category: string;
   description?: string;
   author?: string;
@@ -61,6 +63,55 @@ export const initialUserState = {
 export const initialState = {
   user: { ...initialUserState },
   uploadedFiles: {},
+};
+
+export const userReducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case ActionType.authStateChanged:
+      return {
+        ...state.user,
+        ...action.user,
+      };
+
+    default:
+      return state.user;
+  }
+};
+
+export const fileReducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case ActionType.fileUploaded: {
+      const { uuid, name, url } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        [uuid]: { ...state.uploadedFiles[uuid], url, name },
+      };
+    }
+    case ActionType.progressUpdate: {
+      const { uuid, progress } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        [uuid]: { ...state.uploadedFiles[uuid], progress },
+      };
+    }
+    case ActionType.progressStateUpdate: {
+      const { uuid, progressState } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        [uuid]: { ...state.uploadedFiles[uuid], progressState },
+      };
+    }
+    case ActionType.uploadedPhotosFetched: {
+      const { fetchedPhotos } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        ...fetchedPhotos,
+      };
+    }
+
+    default:
+      return state.uploadedFiles;
+  }
 };
 
 const reducer = (state: State, action: Action) => ({

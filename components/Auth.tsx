@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Action, ActionType, State, useStateValue } from './StateProvider';
+import { useStateValue } from './StateProvider';
 import { Button } from 'semantic-ui-react';
 
 import firebase from 'firebase/app';
@@ -26,19 +26,6 @@ const uiConfig = {
   tosUrl: '/podminky',
   // Privacy policy url/callback.
   privacyPolicyUrl: '/soukromi',
-};
-
-export const userReducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case ActionType.authStateChanged:
-      return {
-        ...state.user,
-        ...action.user,
-      };
-
-    default:
-      return state.user;
-  }
 };
 
 export function Auth() {

@@ -1,45 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button, Header, Icon, Segment, Message } from 'semantic-ui-react';
-import {
-  Action,
-  ActionType,
-  State,
-  useStateValue,
-  ProgressStates,
-} from './StateProvider';
+import { ActionType, useStateValue, ProgressStates } from './StateProvider';
 import { getUUID } from '../lib/uuid';
 import 'firebase/storage';
 import firebase, { FirebaseError } from 'firebase/app';
-
-export const fileReducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case ActionType.fileUploaded: {
-      const { uuid, name, url } = action.payload;
-      return {
-        ...state.uploadedFiles,
-        [uuid]: { ...state.uploadedFiles[uuid], url, name },
-      };
-    }
-    case ActionType.progressUpdate: {
-      const { uuid, progress } = action.payload;
-      return {
-        ...state.uploadedFiles,
-        [uuid]: { ...state.uploadedFiles[uuid], progress },
-      };
-    }
-    case ActionType.progressStateUpdate: {
-      const { uuid, progressState } = action.payload;
-      return {
-        ...state.uploadedFiles,
-        [uuid]: { ...state.uploadedFiles[uuid], progressState },
-      };
-    }
-
-    default:
-      return state.uploadedFiles;
-  }
-};
 
 export function Dropzone() {
   const [error, setError] = useState('');
