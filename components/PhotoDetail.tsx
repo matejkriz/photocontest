@@ -14,7 +14,15 @@ interface Props {
 
 export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
   const [{ user }] = useStateValue();
-  const { url, progress, progressState, name } = photo;
+  const {
+    author,
+    category,
+    description,
+    name,
+    progress,
+    progressState,
+    url,
+  } = photo;
   return (
     <Item {...props}>
       <Item.Image src={decodeURIComponent(url)} label={name} />
@@ -30,9 +38,9 @@ export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
         )}
         <Formik
           initialValues={{
-            category: undefined,
-            description: '',
-            author: '',
+            category,
+            description,
+            author,
           }}
           onSubmit={async ({ category, description, author }, actions) => {
             await firebase
