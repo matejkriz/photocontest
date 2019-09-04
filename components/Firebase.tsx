@@ -23,7 +23,7 @@ export const Firebase = ({
       });
       firebaseInitialized.current = firebase;
       // firebaseui needs it on global window object
-      (window as any).firebase = firebase;
+      window.firebase = firebase;
       forceUpdate({}); // rerender children when firebase is initialized
     }
   }, []);

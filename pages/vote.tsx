@@ -27,7 +27,7 @@ const groupByCategory = groupBy('category');
 async function fetchPhotos(
   firebase: FirebaseType,
   photos: MutableRefObject<PhotosByCategory>,
-  forceUpdate: Dispatch<any>,
+  forceUpdate: Dispatch<{}>,
 ) {
   const db = await firebase.firestore();
   const ref = await db.collection('photos');

@@ -8,12 +8,7 @@ import { breakpoints } from '../theme/breakpoints';
 import { colors } from '../theme/colors';
 import { typography } from '../theme/typography';
 
-interface MyAppProps {
-  Component: any;
-  pageProps: any;
-}
-
-class MyApp extends App<MyAppProps> {
+class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
 

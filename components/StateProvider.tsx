@@ -22,9 +22,10 @@ export interface State {
   };
 }
 
-export interface Action {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface Action<P = any> {
   type: ActionType;
-  [key: string]: any;
+  payload?: P;
 }
 
 export enum ActionType {
@@ -68,9 +69,10 @@ export const initialState = {
 export const userReducer = (state: State, action: Action) => {
   switch (action.type) {
     case ActionType.authStateChanged:
+      const { user } = action.payload;
       return {
         ...state.user,
-        ...action.user,
+        ...user,
       };
 
     default:
@@ -140,14 +142,16 @@ export const StateProvider: React.FunctionComponent<Props> = ({
         .onAuthStateChanged(userAuth => {
           dispatch({
             type: ActionType.authStateChanged,
-            user: userAuth
-              ? {
-                  isSignedIn: true,
-                  email: `${userAuth.email}`,
-                  name: '',
-                  uid: userAuth.uid,
-                }
-              : initialUserState,
+            payload: {
+              user: userAuth
+                ? {
+                    isSignedIn: true,
+                    email: `${userAuth.email}`,
+                    name: '',
+                    uid: userAuth.uid,
+                  }
+                : initialUserState,
+            },
           });
         });
       return () => {

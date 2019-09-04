@@ -1,12 +1,6 @@
 import React from 'react';
 import Document, { Head, Main, NextScript } from 'next/document';
 
-declare global {
-  interface Window {
-    firebaseui: any;
-  }
-}
-
 export default class MyDocument extends Document {
   render() {
     return (

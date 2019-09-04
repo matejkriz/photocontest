@@ -5,7 +5,7 @@
 export const getSafe = <T>(
   fn: () => T,
   defaultValue: T,
-  reportError: boolean = true,
+  reportError = true,
 ): T => {
   try {
     const value = fn();

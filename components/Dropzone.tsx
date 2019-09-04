@@ -68,11 +68,11 @@ export function Dropzone() {
     }
   };
 
-  const handleError = (error: FirebaseError) => {
+  const handleError = (error: Error) => {
     setError(error.message);
     // A full list of error codes is available at
     // https://firebase.google.com/docs/storage/web/handle-errors
-    switch (error.code) {
+    switch ((error as FirebaseError).code) {
       case 'storage/unauthorized':
         // User doesn't have permission to access the object
         break;
@@ -112,7 +112,6 @@ export function Dropzone() {
           uploadTask.on(
             firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
             ownProps => handleSnapshot({ ...ownProps, uuid }),
-            // @ts-ignore wrong fireabse typing
             handleError,
             () => handleSuccess({ uuid, name: file.name, uploadTask }),
           );

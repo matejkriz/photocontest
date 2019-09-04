@@ -1,4 +1,10 @@
-import { useEffect, useState, useRef, MutableRefObject, Dispatch } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  MutableRefObject,
+  Dispatch,
+} from 'react';
 import { FirebaseType } from './Firebase';
 
 import 'firebase/firestore';
@@ -8,7 +14,7 @@ export type Categories = Array<{ key: string; value: string; text: string }>;
 async function fetchCategories(
   firebase: FirebaseType,
   categories: MutableRefObject<Categories>,
-  forceUpdate: Dispatch<any>,
+  forceUpdate: Dispatch<{}>,
 ) {
   const db = await firebase.firestore();
   const categoriesRef = await db.collection('categories');

@@ -21,7 +21,7 @@ async function fetchUploadedPhotos(
   dispatch: Dispatch<Action>,
   user: User,
 ) {
-  console.log(`user.uid: `, user.uid);
+  console.log('user.uid: ', user.uid);
 
   const db = await firebase.firestore();
   const ref = await db.collection('photos'); // TODO .where('user', '==', user.uid); user.uid is not defined so far
