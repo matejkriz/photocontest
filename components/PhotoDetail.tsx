@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik, Field, FieldProps } from 'formik';
-import { Item, Form, Button, Progress } from 'semantic-ui-react';
+import { Checkbox, Item, Form, Button, Progress } from 'semantic-ui-react';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { useStateValue, Photo, ProgressStates } from './StateProvider';
@@ -9,10 +9,17 @@ import { Categories } from './Categories';
 interface Props {
   uuid: string;
   photo: Photo;
+  couldPublishMore: boolean;
   categories: Categories;
 }
 
-export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
+export const PhotoDetail = ({
+  uuid,
+  photo,
+  couldPublishMore,
+  categories,
+  ...props
+}: Props) => {
   const [{ user }] = useStateValue();
   const {
     author,
@@ -21,13 +28,14 @@ export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
     name,
     progress,
     progressState,
+    isPublic,
     url,
   } = photo;
   return (
     <Item {...props}>
       <Item.Image src={decodeURIComponent(url)} label={name} />
       <Item.Content>
-        {progressState !== ProgressStates.inactive && (
+        {progressState !== ProgressStates.inactive && !!progress && (
           <Progress
             percent={progress}
             progress
@@ -41,8 +49,12 @@ export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
             category,
             description,
             author,
+            isPublic,
           }}
-          onSubmit={async ({ category, description, author }, actions) => {
+          onSubmit={async (
+            { category, description, author, isPublic = false },
+            actions,
+          ) => {
             await firebase
               .firestore()
               .collection('photos')
@@ -53,6 +65,7 @@ export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
                 author,
                 user: user.uid,
                 name,
+                isPublic,
                 url,
               });
             actions.setSubmitting(false);
@@ -94,6 +107,24 @@ export const PhotoDetail = ({ uuid, photo, categories, ...props }: Props) => {
                     <input placeholder="Jméno a přezdívka" {...field} />
                   </Form.Field>
                 )}
+              />
+              <Field
+                name="isPublic"
+                render={({ field }: FieldProps) => {
+                  const { value, ...fieldProps } = field;
+                  const id = `${field.name}${uuid}`;
+                  return (
+                    <Form.Field>
+                      <Checkbox
+                        id={id}
+                        label={<label htmlFor={id}>Zveřejnit</label>}
+                        checked={value}
+                        disabled={!value && !couldPublishMore}
+                        {...fieldProps}
+                      />
+                    </Form.Field>
+                  );
+                }}
               />
               <Button color="yellow" type="submit" disabled={isSubmitting}>
                 Uložit

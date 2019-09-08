@@ -44,6 +44,7 @@ export enum ProgressStates {
 }
 
 export interface Photo {
+  isPublic?: boolean;
   uid?: string;
   url: string;
   name: string;

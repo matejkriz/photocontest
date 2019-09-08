@@ -57,6 +57,11 @@ const UploadPage = ({ firebase }: Props) => {
     }
   }, [firebase]);
 
+  const publishedPhotosCount = Object.values(uploadedFiles).reduce(
+    (count, photo) => count + (photo.isPublic ? 1 : 0),
+    0,
+  );
+
   return (
     <Container>
       <Dropzone />
@@ -68,6 +73,7 @@ const UploadPage = ({ firebase }: Props) => {
                 uuid={uuid}
                 photo={photo}
                 categories={categories}
+                couldPublishMore={publishedPhotosCount < 10}
                 key={uuid}
               />
             ))}
