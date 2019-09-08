@@ -1,10 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { Message } from 'semantic-ui-react';
-import 'react-image-gallery/styles/css/image-gallery.css';
 import ImageGallery from 'react-image-gallery';
+import { GalleryStyles } from './GalleryStyles';
 import { Photo } from './StateProvider';
-import Rating from 'react-rating';
 
 interface Props {
   photos: Array<Photo>;
@@ -12,17 +11,19 @@ interface Props {
 
 export const Gallery = ({ photos }: Props) =>
   photos && photos.length ? (
-    <ImageGallery
-      items={photos.map(photo => ({
-        original: decodeURIComponent(photo.url),
-        thumbnail: decodeURIComponent(photo.url),
-      }))}
-      infinite={false}
-      showPlayButton={false}
-      showIndex
-      lazyLoad
-      renderCustomControls={() => <Rating />}
-    />
+    <>
+      <ImageGallery
+        items={photos.map(photo => ({
+          original: decodeURIComponent(photo.url),
+          thumbnail: decodeURIComponent(photo.url),
+        }))}
+        infinite={false}
+        showPlayButton={false}
+        showIndex
+        lazyLoad
+      />
+      <GalleryStyles />
+    </>
   ) : (
     <Message warning>
       Zatím zde nejsou žádné fotografie. Což takhle nějakou{' '}

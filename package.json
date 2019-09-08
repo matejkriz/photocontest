@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@types/react-image-gallery": "^0.8.4",
-    "@zeit/next-css": "^1.0.1",
     "@zeit/webpack-asset-relocator-loader": "0.5.8",
     "dotenv": "^8.0.0",
     "firebase": "^6.3.0",
