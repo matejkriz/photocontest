@@ -6,7 +6,8 @@
     "now-build": "next build",
     "start": "next start",
     "tsc": "tsc",
-    "lint": "eslint --fix ./components/**/* ./pages/**/* ./lib/**/* ./theme/**/*"
+    "eslint": "eslint --fix ./components/**/* ./pages/**/* ./lib/**/* ./theme/**/*",
+    "lint": "yarn tsc && yarn eslint"
   },
   "version": "1.0.0",
   "main": "pages/index.tsx",
