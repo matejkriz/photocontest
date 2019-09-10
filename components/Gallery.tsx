@@ -21,6 +21,7 @@ export const Gallery = ({ photos }: Props) =>
         showPlayButton={false}
         showIndex
         lazyLoad
+        thumbnailPosition="top"
       />
       <GalleryStyles />
     </>

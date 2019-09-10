@@ -232,7 +232,6 @@ export const GalleryStyles = () => (
     }
 
     .image-gallery-slide {
-      background: #fff;
       left: 0;
       position: absolute;
       top: 0;
@@ -241,9 +240,7 @@ export const GalleryStyles = () => (
     .image-gallery-slide.center {
       position: relative;
     }
-    .image-gallery-slide img {
-      width: 100%;
-    }
+
     .image-gallery-slide .image-gallery-description {
       background: rgba(0, 0, 0, 0.4);
       bottom: 70px;
@@ -450,6 +447,14 @@ export const GalleryStyles = () => (
         font-size: 0.8em;
         padding: 5px 10px;
       }
+    }
+    .image-gallery-image {
+      height: 680px;
+      text-align: center;
+    }
+    .image-gallery-image img {
+      max-height: 100%;
+      max-width: 100%;
     }
   `}</style>
 );
