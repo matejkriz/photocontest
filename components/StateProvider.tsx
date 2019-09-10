@@ -9,7 +9,7 @@ import { FirebaseType } from './Firebase';
 import 'firebase/auth';
 
 export interface User {
-  isSignedIn: boolean;
+  isSignedIn?: boolean;
   email: string;
   name: string;
   uid: string;
@@ -44,7 +44,6 @@ export enum ProgressStates {
 }
 
 export interface Photo {
-  isPublic?: boolean;
   uid?: string;
   url: string;
   name: string;
@@ -56,10 +55,21 @@ export interface Photo {
 }
 
 export const initialUserState = {
-  isSignedIn: false,
+  isSignedIn: undefined,
   email: '',
   name: '',
   uid: '',
+};
+
+export const initialPhotoState = {
+  uid: '',
+  url: '',
+  name: '',
+  progress: 0,
+  progressState: ProgressStates.inactive,
+  category: '',
+  description: '',
+  author: '',
 };
 
 export const initialState = {
@@ -87,14 +97,23 @@ export const fileReducer = (state: State, action: Action) => {
       const { uuid, name, url } = action.payload;
       return {
         ...state.uploadedFiles,
-        [uuid]: { ...state.uploadedFiles[uuid], url, name },
+        [uuid]: {
+          ...initialPhotoState,
+          ...state.uploadedFiles[uuid],
+          url,
+          name,
+        },
       };
     }
     case ActionType.progressUpdate: {
       const { uuid, progress } = action.payload;
       return {
         ...state.uploadedFiles,
-        [uuid]: { ...state.uploadedFiles[uuid], progress },
+        [uuid]: {
+          ...initialPhotoState,
+          ...state.uploadedFiles[uuid],
+          progress,
+        },
       };
     }
     case ActionType.progressStateUpdate: {
@@ -151,7 +170,7 @@ export const StateProvider: React.FunctionComponent<Props> = ({
                     name: '',
                     uid: userAuth.uid,
                   }
-                : initialUserState,
+                : { initialUserState, isSignedIn: false },
             },
           });
         });

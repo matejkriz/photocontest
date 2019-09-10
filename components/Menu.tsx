@@ -17,20 +17,17 @@ const MenuComponent = ({ router, firebase }: Props) => {
       <Link href="/" passHref>
         <MenuUI.Item active={router.pathname === '/'}>Pravidla</MenuUI.Item>
       </Link>
-      {user.isSignedIn && (
-        <>
-          <Link href="/vote" passHref>
-            <MenuUI.Item active={router.pathname.startsWith('/vote')}>
-              Hlasovat
-            </MenuUI.Item>
-          </Link>
-          <Link href="/upload" passHref>
-            <MenuUI.Item active={router.pathname.startsWith('/upload')}>
-              Nahrát fotky
-            </MenuUI.Item>
-          </Link>
-        </>
-      )}
+      <Link href="/vote" passHref>
+        <MenuUI.Item active={router.pathname.startsWith('/vote')}>
+          Hlasovat
+        </MenuUI.Item>
+      </Link>
+      <Link href="/upload" passHref>
+        <MenuUI.Item active={router.pathname.startsWith('/upload')}>
+          Nahrát fotky
+        </MenuUI.Item>
+      </Link>
+
       <MenuUI.Menu position="right">
         {user.isSignedIn && firebase ? (
           <MenuUI.Item onClick={() => firebase.auth().signOut()}>

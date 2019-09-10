@@ -7,10 +7,11 @@ import React, {
 } from 'react';
 import 'firebase/firestore';
 import { Container, Menu, Message } from 'semantic-ui-react';
+import { AskForAuthorization } from '../components/AskForAuthorization';
 import { Categories } from '../components/Categories';
 import { FirebaseType } from '../components/Firebase';
 import { Gallery } from '../components/Gallery';
-import { Photo } from '../components/StateProvider';
+import { useStateValue, Photo } from '../components/StateProvider';
 import { groupBy } from '../lib/arrays';
 import { getSafe } from '../lib';
 
@@ -44,15 +45,16 @@ async function fetchPhotos(
 }
 
 const VotingPage = ({ firebase }: Props) => {
+  const [{ user }] = useStateValue();
   const [, forceUpdate] = useState();
   const [selectedCategory, selectCategory] = useState();
   const photos = useRef<PhotosByCategory>({});
   useEffect(() => {
-    if (firebase) {
+    if (firebase && user.isSignedIn) {
       fetchPhotos(firebase, photos, forceUpdate);
     }
-  }, [firebase]);
-  return (
+  }, [firebase, user.isSignedIn]);
+  return user.isSignedIn ? (
     <Container>
       <Categories firebase={firebase}>
         {categories => (
@@ -86,6 +88,8 @@ const VotingPage = ({ firebase }: Props) => {
         )}
       </Categories>
     </Container>
+  ) : (
+    <AskForAuthorization />
   );
 };
 

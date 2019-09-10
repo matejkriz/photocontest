@@ -1,5 +1,6 @@
 import React, { Dispatch, useEffect } from 'react';
 import { Container, Item } from 'semantic-ui-react';
+import { AskForAuthorization } from '../components/AskForAuthorization';
 import { Categories } from '../components/Categories';
 import { Dropzone } from '../components/Dropzone';
 import { FirebaseType } from '../components/Firebase';
@@ -21,10 +22,8 @@ async function fetchUploadedPhotos(
   dispatch: Dispatch<Action>,
   user: User,
 ) {
-  console.log('user.uid: ', user.uid);
-
   const db = await firebase.firestore();
-  const ref = await db.collection('photos'); // TODO .where('user', '==', user.uid); user.uid is not defined so far
+  const ref = await db.collection('photos').where('user', '==', user.uid);
   const snapshot = await ref.get();
 
   const fetchedPhotos = snapshot.docs
@@ -52,17 +51,12 @@ const UploadPage = ({ firebase }: Props) => {
   const [{ uploadedFiles, user }, dispatch] = useStateValue();
 
   useEffect(() => {
-    if (firebase) {
+    if (firebase && user.isSignedIn) {
       fetchUploadedPhotos(firebase, dispatch, user);
     }
-  }, [firebase]);
+  }, [firebase, user.isSignedIn]);
 
-  const publishedPhotosCount = Object.values(uploadedFiles).reduce(
-    (count, photo) => count + (photo.isPublic ? 1 : 0),
-    0,
-  );
-
-  return (
+  return user.isSignedIn ? (
     <Container>
       <Dropzone />
       <Categories firebase={firebase}>
@@ -73,7 +67,6 @@ const UploadPage = ({ firebase }: Props) => {
                 uuid={uuid}
                 photo={photo}
                 categories={categories}
-                couldPublishMore={publishedPhotosCount < 10}
                 key={uuid}
               />
             ))}
@@ -81,6 +74,8 @@ const UploadPage = ({ firebase }: Props) => {
         )}
       </Categories>
     </Container>
+  ) : (
+    <AskForAuthorization />
   );
 };
 
