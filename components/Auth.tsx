@@ -12,7 +12,7 @@ let firebaseUiDeletion = Promise.resolve();
 
 // FirebaseUI config.
 const uiConfig = {
-  signInSuccessUrl: '/',
+  signInSuccessUrl: '/login',
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
     {
@@ -23,9 +23,9 @@ const uiConfig = {
   // tosUrl and privacyPolicyUrl accept either url string or a callback
   // function.
   // Terms of service url/callback.
-  tosUrl: '/podminky',
+  tosUrl: '/',
   // Privacy policy url/callback.
-  privacyPolicyUrl: '/soukromi',
+  privacyPolicyUrl: '/',
 };
 
 export function Auth() {
