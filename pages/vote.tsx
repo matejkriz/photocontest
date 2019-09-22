@@ -59,7 +59,7 @@ const VotingPage = ({ firebase }: Props) => {
       <Categories firebase={firebase}>
         {categories => (
           <>
-            <Menu tabular inverted>
+            <Menu tabular stackable inverted>
               <Menu.Item header>Kategorie:</Menu.Item>
               {categories.map(({ key, value, text }) => (
                 <Menu.Item
