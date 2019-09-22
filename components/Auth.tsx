@@ -59,7 +59,7 @@ export function Auth() {
       };
     });
   }, []);
-
+  // TODO formik withp shared password and name
   return (
     <div>
       <div id={firebaseUIContainerID} />
