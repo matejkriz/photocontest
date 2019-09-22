@@ -59,8 +59,6 @@ async function fetchUploadedPhotos(
   });
 }
 
-// TODO: handle error messages
-
 export const PhotoForm = () => {
   const [{ uploadedFiles, user }, dispatch] = useStateValue();
 

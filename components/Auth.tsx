@@ -19,6 +19,14 @@ const uiConfig = {
       provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
       signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
     },
+    {
+      provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      scopes: ['https://www.googleapis.com/auth/contacts.readonly'],
+    },
+    {
+      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      scopes: ['public_profile', 'email', 'user_likes', 'user_friends'],
+    },
   ],
   // tosUrl and privacyPolicyUrl accept either url string or a callback
   // function.
