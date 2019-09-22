@@ -1,6 +1,6 @@
 import React from 'react';
 import { Divider, Form, Item, Progress, Segment } from 'semantic-ui-react';
-import { Field, FieldProps } from 'formik';
+import { getIn, Field, FieldProps, ErrorMessage } from 'formik';
 import { Photo, ProgressStates } from './StateProvider';
 import { Categories } from './Categories';
 
@@ -38,42 +38,81 @@ export const PhotoDetail = ({
           <Segment inverted>
             <Field
               name={`photos[${index}].category`}
-              render={({ field, form }: FieldProps) => (
-                <Form.Select
-                  label="Kategorie"
-                  {...field}
-                  placeholder="Zvolte kategorii"
-                  options={categories}
-                  onChange={(__, { name, value }) => {
-                    form.setFieldValue(name, value);
-                  }}
-                  onBlur={() => {
-                    form.setFieldTouched(field.name);
-                  }}
-                />
-              )}
+              render={({ field, form }: FieldProps) => {
+                const error = getIn(form.errors, field.name);
+                const touch = getIn(form.touched, field.name);
+                return (
+                  <Form.Select
+                    label="Kategorie *"
+                    error={
+                      touch &&
+                      error && {
+                        content: <ErrorMessage name={field.name} />,
+                      }
+                    }
+                    {...field}
+                    placeholder="Zvol kategorii"
+                    options={categories}
+                    onChange={(__, { name, value }) => {
+                      form.setFieldValue(name, value);
+                    }}
+                    onBlur={() => {
+                      form.setFieldTouched(field.name);
+                    }}
+                  />
+                );
+              }}
             />
+
             <Field
               name={`photos[${index}].description`}
-              render={({ field }: FieldProps) => (
-                <Form.TextArea
-                  label="Popis fotky (veřejný)"
-                  placeholder="1. 1. 2000 Stopař posílá rachejtli"
-                  {...field}
-                />
-              )}
+              render={({ field, form }: FieldProps) => {
+                const error = getIn(form.errors, field.name);
+                const touch = getIn(form.touched, field.name);
+                return (
+                  <Form.TextArea
+                    error={
+                      touch &&
+                      error && {
+                        content: <ErrorMessage name={field.name} />,
+                      }
+                    }
+                    label="Popis fotky (veřejný) *"
+                    placeholder={
+                      touch && error
+                        ? 'Doplň prosím popis fotky'
+                        : '1. 1. 2000 Stopař posílá rachejtli'
+                    }
+                    {...field}
+                  />
+                );
+              }}
             />
             <Field
               name={`photos[${index}].author`}
-              render={({ field }: FieldProps) => (
-                <Form.Field>
-                  <Form.Input
-                    label="Autor (skrytý během hlasování)"
-                    placeholder="Jméno a přezdívka"
-                    {...field}
-                  />
-                </Form.Field>
-              )}
+              render={({ field, form }: FieldProps) => {
+                const error = getIn(form.errors, field.name);
+                const touch = getIn(form.touched, field.name);
+                return (
+                  <Form.Field>
+                    <Form.Input
+                      label="Autor (skrytý během hlasování) *"
+                      error={
+                        touch &&
+                        error && {
+                          content: <ErrorMessage name={field.name} />,
+                        }
+                      }
+                      placeholder={
+                        touch && error
+                          ? 'Doplň prosím jméno a přezdívku'
+                          : 'Jméno a přezdívka'
+                      }
+                      {...field}
+                    />
+                  </Form.Field>
+                );
+              }}
             />
           </Segment>
         </Item.Content>
