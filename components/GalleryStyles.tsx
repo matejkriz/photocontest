@@ -1,5 +1,7 @@
 import React from 'react';
 
+// TODO fix gallery styles on mobile
+
 export const GalleryStyles = () => (
   <style global jsx>{`
     @font-face {
