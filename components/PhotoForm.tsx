@@ -3,7 +3,7 @@ import { Formik, FieldArray } from 'formik';
 import { array, object, string } from 'yup';
 import 'firebase/firestore';
 import firebase from 'firebase/app';
-import { Button, Form, Item, Segment } from 'semantic-ui-react';
+import { Button, Form, Item, Segment, Transition } from 'semantic-ui-react';
 import { Categories } from '../components/Categories';
 import { FirebaseType } from '../components/Firebase';
 import {
@@ -104,10 +104,18 @@ export const PhotoForm = () => {
 
                 await batch.commit();
               }
+              fetchUploadedPhotos(firebase, dispatch, user);
               actions.setSubmitting(false);
             }}
             validationSchema={Schema}
-            render={({ values, handleReset, handleSubmit, isSubmitting }) => (
+            render={({
+              values,
+              handleReset,
+              handleSubmit,
+              isSubmitting,
+              isValid,
+              dirty,
+            }) => (
               <Form inverted onReset={handleReset} onSubmit={handleSubmit}>
                 <FieldArray
                   name="photos"
@@ -139,18 +147,22 @@ export const PhotoForm = () => {
                     </Item.Group>
                   )}
                 />
-                <div className="submitWrapper">
-                  <Segment inverted textAlign="center">
-                    <Button
-                      color="yellow"
-                      type="submit"
-                      disabled={isSubmitting}
-                      size="massive"
-                    >
-                      Uložit
-                    </Button>
-                  </Segment>
-                </div>
+                <Transition.Group animation="fly up" duration={600}>
+                  {dirty && (
+                    <div className="submitWrapper">
+                      <Segment inverted textAlign="center">
+                        <Button
+                          color="yellow"
+                          type="submit"
+                          disabled={isSubmitting || !isValid}
+                          size="massive"
+                        >
+                          Uložit
+                        </Button>
+                      </Segment>
+                    </div>
+                  )}
+                </Transition.Group>
               </Form>
             )}
           />
