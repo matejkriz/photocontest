@@ -108,14 +108,7 @@ export const PhotoForm = () => {
               actions.setSubmitting(false);
             }}
             validationSchema={Schema}
-            render={({
-              values,
-              handleReset,
-              handleSubmit,
-              isSubmitting,
-              isValid,
-              dirty,
-            }) => (
+            render={({ values, handleReset, handleSubmit, isSubmitting }) => (
               <Form inverted onReset={handleReset} onSubmit={handleSubmit}>
                 <FieldArray
                   name="photos"
@@ -158,13 +151,13 @@ export const PhotoForm = () => {
                   )}
                 />
                 <Transition.Group animation="fly up" duration={600}>
-                  {dirty && (
+                  {values.photos && values.photos.length > 0 && (
                     <div className="submitWrapper">
                       <Segment inverted textAlign="center">
                         <Button
                           color="yellow"
                           type="submit"
-                          disabled={isSubmitting || !isValid}
+                          disabled={isSubmitting}
                           size="massive"
                         >
                           Uložit
