@@ -119,7 +119,7 @@ export const PhotoForm = () => {
               <Form inverted onReset={handleReset} onSubmit={handleSubmit}>
                 <FieldArray
                   name="photos"
-                  render={() => (
+                  render={({ remove }) => (
                     <Item.Group>
                       {values.photos &&
                         values.photos.length > 0 &&
@@ -140,6 +140,16 @@ export const PhotoForm = () => {
                               progressState={progressState}
                               url={url}
                               categories={categories}
+                              handleRemove={async () => {
+                                if (firebase) {
+                                  const db = await firebase.firestore();
+                                  await db
+                                    .collection('photos')
+                                    .doc(uid)
+                                    .delete();
+                                  remove(index);
+                                }
+                              }}
                               key={uid}
                             />
                           );

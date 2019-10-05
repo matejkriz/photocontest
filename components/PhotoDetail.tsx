@@ -1,5 +1,13 @@
 import React from 'react';
-import { Divider, Form, Item, Progress, Segment } from 'semantic-ui-react';
+import {
+  Button,
+  Divider,
+  Form,
+  Icon,
+  Item,
+  Progress,
+  Segment,
+} from 'semantic-ui-react';
 import { getIn, Field, FieldProps, ErrorMessage } from 'formik';
 import { Photo, ProgressStates } from './StateProvider';
 import { Categories } from './Categories';
@@ -7,6 +15,7 @@ import { Categories } from './Categories';
 interface Props extends Photo {
   index: number;
   categories: Categories;
+  handleRemove: () => void;
 }
 
 // TODO make description and author required and remove isPublic and save all at once, and replace save button with delete button
@@ -17,6 +26,7 @@ export const PhotoDetail = ({
   progress,
   progressState,
   url,
+  handleRemove,
   categories,
 }: Props) => {
   return progressState !== ProgressStates.inactive &&
@@ -114,6 +124,18 @@ export const PhotoDetail = ({
                 );
               }}
             />
+            <Item.Extra>
+              <Button
+                floated="right"
+                basic
+                inverted
+                negative
+                onClick={() => handleRemove()}
+                type="button"
+              >
+                <Icon name="trash alternate" /> Smazat
+              </Button>
+            </Item.Extra>
           </Segment>
         </Item.Content>
       </Item>
