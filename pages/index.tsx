@@ -170,9 +170,7 @@ const Index = () => {
         <List.Item as="li">
           Pokud byste měli jakékoliv otázky, neváhejte nás kontaktovat:
           <List.List>
-            <List.Item>
-              Flíček - 607535669, krizova.bety@gmail.com
-            </List.Item>
+            <List.Item>Flíček - 607535669, krizova.bety@gmail.com</List.Item>
             <List.Item>Matěj - 775224369, matej@matejkriz.cz</List.Item>
           </List.List>
         </List.Item>
