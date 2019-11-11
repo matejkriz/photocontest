@@ -11,7 +11,7 @@ export const AskForAuthorization = () => {
     <Message warning>
       Nejprve se prosím{' '}
       <Link href="/login">
-        <a>přihlaš pomocí emailu</a>
+        <a>přihlaš</a>
       </Link>
       .
     </Message>

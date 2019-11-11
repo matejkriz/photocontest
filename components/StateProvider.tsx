@@ -18,6 +18,9 @@ export interface User {
 export interface State {
   user: User;
   uploadedFiles: {
+    [uuid: string]: File;
+  };
+  photos: {
     [uuid: string]: Photo;
   };
 }
@@ -33,7 +36,7 @@ export enum ActionType {
   fileUploaded = 'fileUploaded',
   progressStateUpdate = 'progressStateUpdate',
   progressUpdate = 'progressUpdate',
-  uploadedPhotosFetched = 'uploadedPhotosFetched',
+  photosFetched = 'photosFetched',
 }
 
 export enum ProgressStates {
@@ -43,12 +46,20 @@ export enum ProgressStates {
   error = 'error',
 }
 
-export interface Photo {
+export interface File {
   uid?: string;
   url: string;
   name: string;
   progress?: number;
   progressState?: ProgressStates;
+}
+
+export interface Photo {
+  uid?: string;
+  url: string;
+  viewFilePath: string;
+  thumbFilePath: string;
+  name: string;
   category: string;
   description?: string;
   author?: string;
@@ -61,12 +72,20 @@ export const initialUserState = {
   uid: '',
 };
 
-export const initialPhotoState = {
+export const initialFileState: File = {
   uid: '',
   url: '',
   name: '',
   progress: 0,
   progressState: ProgressStates.inactive,
+};
+
+export const initialPhotoState: Photo = {
+  uid: '',
+  url: '',
+  viewFilePath: '',
+  thumbFilePath: '',
+  name: '',
   category: '',
   description: '',
   author: '',
@@ -75,6 +94,7 @@ export const initialPhotoState = {
 export const initialState = {
   user: { ...initialUserState },
   uploadedFiles: {},
+  photos: {},
 };
 
 export const userReducer = (state: State, action: Action) => {
@@ -98,7 +118,7 @@ export const fileReducer = (state: State, action: Action) => {
       return {
         ...state.uploadedFiles,
         [uuid]: {
-          ...initialPhotoState,
+          ...initialFileState,
           ...state.uploadedFiles[uuid],
           url,
           name,
@@ -110,7 +130,7 @@ export const fileReducer = (state: State, action: Action) => {
       return {
         ...state.uploadedFiles,
         [uuid]: {
-          ...initialPhotoState,
+          ...initialFileState,
           ...state.uploadedFiles[uuid],
           progress,
         },
@@ -123,22 +143,30 @@ export const fileReducer = (state: State, action: Action) => {
         [uuid]: { ...state.uploadedFiles[uuid], progressState },
       };
     }
-    case ActionType.uploadedPhotosFetched: {
+    default:
+      return state.uploadedFiles;
+  }
+};
+
+export const photoReducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case ActionType.photosFetched: {
       const { fetchedPhotos } = action.payload;
       return {
-        ...state.uploadedFiles,
+        ...state.photos,
         ...fetchedPhotos,
       };
     }
 
     default:
-      return state.uploadedFiles;
+      return state.photos;
   }
 };
 
 const reducer = (state: State, action: Action) => ({
   user: userReducer(state, action),
   uploadedFiles: fileReducer(state, action),
+  photos: photoReducer(state, action),
 });
 
 export const StateContext = createContext((undefined as unknown) as [

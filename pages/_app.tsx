@@ -26,8 +26,8 @@ class MyApp extends App {
         <style jsx global>
           {`
             body {
-              background-color: ${colors.black};
-              color: ${colors.whiteDirty};
+              background-color: ${colors.grayBright};
+              color: ${colors.black};
             }
           `}
         </style>

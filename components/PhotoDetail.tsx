@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-  Button,
-  Divider,
-  Form,
-  Icon,
-  Item,
-  Progress,
-  Segment,
-} from 'semantic-ui-react';
+import { Button, Divider, Form, Icon, Item, Segment } from 'semantic-ui-react';
 import { getIn, Field, FieldProps, ErrorMessage } from 'formik';
-import { Photo, ProgressStates } from './StateProvider';
+import { Photo } from './StateProvider';
 import { Categories } from './Categories';
 
 interface Props extends Photo {
@@ -18,32 +10,18 @@ interface Props extends Photo {
   handleRemove: () => void;
 }
 
-// TODO make description and author required and remove isPublic and save all at once, and replace save button with delete button
-
 export const PhotoDetail = ({
   index,
   name,
-  progress,
-  progressState,
-  url,
+  thumbFilePath,
   handleRemove,
   categories,
 }: Props) => {
-  return progressState !== ProgressStates.inactive &&
-    !!progress &&
-    progress < 100 ? (
-    <Progress
-      percent={progress}
-      progress
-      success={progress === 100}
-      disabled={progressState === ProgressStates.paused}
-      error={progressState === ProgressStates.error}
-    />
-  ) : (
+  return (
     <>
       <Divider inverted />
       <Item>
-        {!!url && <Item.Image src={decodeURIComponent(url)} label={name} />}
+        {!!thumbFilePath && <Item.Image src={thumbFilePath} label={name} />}
         <Item.Content>
           <Segment inverted>
             <Field

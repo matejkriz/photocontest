@@ -8,7 +8,7 @@ import firebase, { FirebaseError } from 'firebase/app';
 
 export function Dropzone() {
   const [error, setError] = useState('');
-  const [{}, dispatch] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
 
   const handleSuccess = async ({
     uuid,
@@ -106,7 +106,9 @@ export function Dropzone() {
         acceptedFiles.forEach(file => {
           const uuid = getUUID();
           // Upload file and metadata to the object 'images/mountains.jpg'
-          const uploadTask = storageRef.child(`photos/${uuid}`).put(file);
+          const uploadTask = storageRef
+            .child(`photos/${user.uid}/${uuid}`)
+            .put(file);
 
           // Listen for state changes, errors, and completion of the upload.
           uploadTask.on(

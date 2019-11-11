@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container } from 'semantic-ui-react';
 import { Auth } from '../components/Auth';
 import { AuthForm } from '../components/AuthForm';
 import { FirebaseType } from '../components/Firebase';
@@ -10,14 +11,12 @@ interface Props {
 
 const LoginPage = ({ firebase }: Props) => {
   const [{ user }] = useStateValue();
-  console.log('user: ', user);
 
   return (
-    <div>
+    <Container>
       <h1>Přihlášení</h1>
-      <Auth firebase={firebase} />
-      {user.isSignedIn && <AuthForm />}
-    </div>
+      {user.isSignedIn ? <AuthForm /> : <Auth firebase={firebase} />}
+    </Container>
   );
 };
 

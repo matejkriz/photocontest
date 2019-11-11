@@ -14,8 +14,9 @@ export const Gallery = ({ photos }: Props) =>
     <>
       <ImageGallery
         items={photos.map(photo => ({
-          original: decodeURIComponent(photo.url),
-          thumbnail: decodeURIComponent(photo.url),
+          original: photo.viewFilePath,
+          thumbnail: photo.thumbFilePath,
+          description: `${photo.author}: ${photo.description}`,
         }))}
         infinite={false}
         showPlayButton={false}

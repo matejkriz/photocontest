@@ -4,17 +4,30 @@ import { AskForAuthorization } from '../components/AskForAuthorization';
 import { PhotoForm } from '../components/PhotoForm';
 import { Dropzone } from '../components/Dropzone';
 import { useStateValue } from '../components/StateProvider';
+import { colors } from '../theme/colors';
 
 const UploadPage = () => {
   const [{ user }] = useStateValue();
 
-  return user.isSignedIn ? (
+  return (
     <Container>
-      <Dropzone />
-      <PhotoForm />
+      {user.isSignedIn ? (
+        <>
+          <Dropzone />
+          <PhotoForm />
+        </>
+      ) : (
+        <AskForAuthorization />
+      )}
+      <style jsx global>
+        {`
+          html body {
+            background-color: ${colors.black};
+            color: ${colors.whiteDirty};
+          }
+        `}
+      </style>
     </Container>
-  ) : (
-    <AskForAuthorization />
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { FirebaseType } from './Firebase';
 import { useStateValue } from './StateProvider';
-import { Button } from 'semantic-ui-react';
+import { Button, Segment } from 'semantic-ui-react';
 
 import firebaseApp from 'firebase/app';
 import 'firebase/auth';
@@ -21,12 +21,12 @@ const uiConfig = {
       signInMethod:
         firebaseApp.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
     },
-    {
-      provider: firebaseApp.auth.GoogleAuthProvider.PROVIDER_ID,
-    },
-    {
-      provider: firebaseApp.auth.FacebookAuthProvider.PROVIDER_ID,
-    },
+    // {
+    //   provider: firebaseApp.auth.GoogleAuthProvider.PROVIDER_ID,
+    // },
+    // {
+    //   provider: firebaseApp.auth.FacebookAuthProvider.PROVIDER_ID,
+    // },
   ],
   // tosUrl and privacyPolicyUrl accept either url string or a callback
   // function.
@@ -105,14 +105,14 @@ export function Auth({ firebase }: Props) {
         };
       });
     }
-  }, []);
+  }, [firebase]);
 
   return (
-    <div>
+    <Segment placeholder>
       <div id={firebaseUIContainerID} />
       {firebase && user.isSignedIn && (
         <Button onClick={() => firebase.auth().signOut()}>Odhlásit</Button>
       )}
-    </div>
+    </Segment>
   );
 }

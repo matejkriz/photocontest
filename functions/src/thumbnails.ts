@@ -11,20 +11,27 @@ const THUMB_MAX_WIDTH = 128;
 const VIEW_MAX_HEIGHT = 1080;
 const VIEW_MAX_WIDTH = 1920;
 // Thumbnail prefix added to file names.
-const THUMB_PREFIX = 'thumb_';
-const VIEW_PREFIX = 'view_';
+export const THUMB_PREFIX = 'thumb_';
+export const VIEW_PREFIX = 'view_';
 
-export const handleThumbnails = async (object: any) => {
+export const handleThumbnails = async (object: any, context: any) => {
   // File and directory paths.
   const filePath = object.name;
   const contentType = object.contentType; // This is the image MIME type
-  const fileDir = path.dirname(filePath);
+  const fileDirPath = path.dirname(filePath);
+  const fileDirParts = fileDirPath.split('/');
   const fileName = path.basename(filePath);
+  const fileDir = fileDirParts[0];
+  const user = fileDirParts[1];
+
+  console.log('object: ', JSON.stringify(object));
+  console.log('context, user: ', JSON.stringify(context), user);
+
   const thumbFilePath = path.normalize(
-    path.join(fileDir, `${THUMB_PREFIX}${fileName}`),
+    path.join(fileDirPath, `${THUMB_PREFIX}${fileName}`),
   );
   const viewFilePath = path.normalize(
-    path.join(fileDir, `${VIEW_PREFIX}${fileName}`),
+    path.join(fileDirPath, `${VIEW_PREFIX}${fileName}`),
   );
   const tempLocalFile = path.join(os.tmpdir(), filePath);
   const tempLocalDir = path.dirname(tempLocalFile);
@@ -94,11 +101,51 @@ export const handleThumbnails = async (object: any) => {
     destination: viewFilePath,
     metadata: metadata,
   });
+
   console.log('View thumbnail uploaded to Storage at', viewFilePath);
+
   // Once the image has been uploaded delete the local files to free up disk space.
   fs.unlinkSync(tempLocalFile);
   fs.unlinkSync(tempLocalThumbFile);
   fs.unlinkSync(tempLocalViewFile);
+
+  // Get the Signed URLs for the thumbnail and original image.
+  const config = {
+    action: 'read',
+    expires: '03-01-2500',
+  };
+
+  const viewFile = bucket.file(viewFilePath);
+  const thumbFile = bucket.file(thumbFilePath);
+
+  const results = await Promise.all([
+    file.getSignedUrl(config),
+    thumbFile.getSignedUrl(config),
+    viewFile.getSignedUrl(config),
+  ]);
+  console.log('Got Signed URLs.');
+  const origResult = results[0];
+  const thumbResult = results[1];
+  const viewResult = results[2];
+  const origFileUrl = origResult[0];
+  const thumbFileUrl = thumbResult[0];
+  const viewFileUrl = viewResult[0];
+
+  // Store paths in firestore
+  const db = await admin.firestore();
+  const collection = await db.collection(fileDir);
+
+  const photoEntry = {
+    user,
+    url: origFileUrl,
+    viewFilePath: viewFileUrl,
+    thumbFilePath: thumbFileUrl,
+  };
+
+  console.log('photoEntry: ', JSON.stringify(photoEntry));
+
+  await collection.doc(fileName).set(photoEntry);
+  return console.log('Thumbnail URLs saved to database.');
 
   return;
 };

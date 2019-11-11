@@ -11,10 +11,10 @@ import {
 const Index = () => {
   return (
     <Container text>
-      <Header as="h1" inverted color="yellow">
+      <Header as="h1" color="yellow">
         FOTOSOUTĚŽ
       </Header>
-      <Header as="h2" disabled inverted>
+      <Header as="h2" disabled>
         ...ANEB, HLEDÁ SE FOTKA TŘICETILETÍ
       </Header>
       <Image
@@ -22,19 +22,15 @@ const Index = () => {
         centered
         alt="Skaut s foťákem místo hlavy"
       />
-      <Header as="h2" inverted>
-        PRAVIDLA
-      </Header>
-      <Message color="black">
+      <Header as="h2">PRAVIDLA</Header>
+      <Message>
         K příležitosti oslav třicetiletého výročí našeho střediska, vyhlašujeme
         fotografickou soutěž. Možná právě ty jsi autorem fotky třicetiletí, tak
         neváhej a vydej se vstříc svému fotoarchivu!
       </Message>
       <Divider />
-      <Header as="h3" inverted>
-        TERMÍNY
-      </Header>
-      <List as="ul" inverted>
+      <Header as="h3">TERMÍNY</Header>
+      <List as="ul">
         <List.Item as="li">
           Přihlašování fotografií je již spuštěno, ukončeno bude 30. 9. 2019.
           {/* FIXME datum */}
@@ -48,18 +44,16 @@ const Index = () => {
         </List.Item>
       </List>
       <Divider />
-      <Header as="h3" inverted>
-        KATEGORIE
-      </Header>
+      <Header as="h3">KATEGORIE</Header>
       Hledej fotografie spojené s existencí našeho střediska a přihlašuj je do
       následujících kategorií:
-      <List as="ul" inverted>
+      <List as="ul">
         <List.Item as="li">Dobrodružstvíd</List.Item>
         <List.Item as="li">Zlomové okamžikyd</List.Item>
         <List.Item as="li">Humord</List.Item>
         <List.Item as="li">Přátelstvíd</List.Item>
       </List>
-      <Message color="black">
+      <Message>
         Fotografie budou hodnoceny vždy v rámci dané kategorie, každá kategorie
         bude mít tedy svého vítěze. Do kategorie Humor můžeš přihlásit i soubor
         dvou fotografií, kdy jedna bude rekonstrukcí té druhé, staré fotografie.
@@ -68,10 +62,8 @@ const Index = () => {
         budou titíž lidé, jen o 30 let později…)
       </Message>
       <Divider />
-      <Header as="h3" inverted>
-        FOTOGRAFIE
-      </Header>
-      <List as="ul" inverted>
+      <Header as="h3">FOTOGRAFIE</Header>
+      <List as="ul">
         <List.Item as="li">
           Do soutěže můžeš přihlásit maximálně <b>10 fotografií</b> napříč
           kategoriemi. Je tedy na tobě, zda do jedné kategorie přihlásíš fotek 9
@@ -103,10 +95,8 @@ const Index = () => {
         </List.Item>
       </List>
       <Divider />
-      <Header as="h3" inverted>
-        HLASOVÁNÍ
-      </Header>
-      <List as="ul" inverted>
+      <Header as="h3">HLASOVÁNÍ</Header>
+      <List as="ul">
         <List.Item as="li">
           Možnost rozhodnout o vítězi budou mít všichni současní i bývalí
           členové střediska.
@@ -128,10 +118,8 @@ const Index = () => {
         </List.Item>
       </List>
       <Divider />
-      <Header as="h3" inverted>
-        WEB SOUTĚŽE
-      </Header>
-      <List as="ul" inverted>
+      <Header as="h3">WEB SOUTĚŽE</Header>
+      <List as="ul">
         <List.Item as="li">
           Na těchto stránkách je možné fotografie do soutěže jak přihlásit, tak
           hodnotit.
@@ -143,10 +131,8 @@ const Index = () => {
         </List.Item>
       </List>
       <Divider />
-      <Header as="h3" inverted>
-        OSTATNÍ
-      </Header>
-      <List as="ul" inverted>
+      <Header as="h3">OSTATNÍ</Header>
+      <List as="ul">
         <List.Item as="li">Soutěžíme o věcné ceny!</List.Item>
         <List.Item as="li">
           Pokud bys v rámci procházení svého archivu narazil na další zajímavé
@@ -162,10 +148,8 @@ const Index = () => {
         </List.Item>
       </List>
       <Divider />
-      <Header as="h3" inverted>
-        KONTAKTY
-      </Header>
-      <List as="ul" inverted>
+      <Header as="h3">KONTAKTY</Header>
+      <List as="ul">
         <List.Item as="li">Pořadateli soutěže jsou Flíček a Matěj.</List.Item>
         <List.Item as="li">
           Pokud byste měli jakékoliv otázky, neváhejte nás kontaktovat:

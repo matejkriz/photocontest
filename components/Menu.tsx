@@ -13,7 +13,12 @@ interface Props {
 const MenuComponent = ({ router, firebase }: Props) => {
   const [{ user }] = useStateValue();
   return (
-    <MenuUI pointing secondary stackable inverted>
+    <MenuUI
+      pointing
+      secondary
+      stackable
+      inverted={['/vote', '/upload'].includes(router.pathname)}
+    >
       <Link href="/" passHref>
         <MenuUI.Item active={router.pathname === '/'}>Pravidla</MenuUI.Item>
       </Link>

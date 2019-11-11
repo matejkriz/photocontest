@@ -3,7 +3,7 @@ import Router from 'next/router';
 import { useStateValue } from './StateProvider';
 import { object, string } from 'yup';
 import { Formik, Field, FieldProps, getIn, ErrorMessage } from 'formik';
-import { Button, Form } from 'semantic-ui-react';
+import { Button, Form, Segment } from 'semantic-ui-react';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -17,7 +17,7 @@ const Schema = object().shape({
 export function AuthForm() {
   const [{ user }] = useStateValue();
   return (
-    <div>
+    <Segment placeholder>
       <Formik
         initialValues={{
           name: user.name || '',
@@ -40,11 +40,11 @@ export function AuthForm() {
             secretsRef.set({ secret });
           }
           actions.setSubmitting(false);
-          Router.push('/');
+          Router.push('/login');
         }}
         validationSchema={Schema}
         render={({ handleReset, handleSubmit, isSubmitting }) => (
-          <Form inverted onReset={handleReset} onSubmit={handleSubmit}>
+          <Form onReset={handleReset} onSubmit={handleSubmit}>
             <Field
               name="name"
               render={({ field, form }: FieldProps) => {
@@ -104,6 +104,6 @@ export function AuthForm() {
           </Form>
         )}
       />
-    </div>
+    </Segment>
   );
 }

@@ -14,6 +14,7 @@ import { Gallery } from '../components/Gallery';
 import { useStateValue, Photo } from '../components/StateProvider';
 import { groupBy } from '../lib/arrays';
 import { getSafe } from '../lib';
+import { colors } from '../theme/colors';
 
 interface Props {
   firebase?: FirebaseType;
@@ -31,7 +32,7 @@ async function fetchPhotos(
   forceUpdate: Dispatch<{}>,
 ) {
   const db = await firebase.firestore();
-  const ref = await db.collection('photos');
+  const ref = await db.collection('photos').where('public', '==', true);
   const snapshot = await ref.get();
 
   const allPhotos = snapshot.docs.map(doc => ({
@@ -54,42 +55,54 @@ const VotingPage = ({ firebase }: Props) => {
       fetchPhotos(firebase, photos, forceUpdate);
     }
   }, [firebase, user.isSignedIn]);
-  return user.isSignedIn ? (
+  return (
     <Container>
-      <Categories firebase={firebase}>
-        {categories => (
-          <>
-            <Menu tabular stackable inverted>
-              <Menu.Item header>Kategorie:</Menu.Item>
-              {categories.map(({ key, value, text }) => (
-                <Menu.Item
-                  key={key}
-                  name={value}
-                  active={selectedCategory === value}
-                  onClick={() => selectCategory(value)}
+      {user.isSignedIn ? (
+        <Categories firebase={firebase}>
+          {categories => (
+            <>
+              <Menu tabular stackable inverted>
+                <Menu.Item header>Kategorie:</Menu.Item>
+                {categories.map(({ key, value, text }) => (
+                  <Menu.Item
+                    key={key}
+                    name={value}
+                    active={selectedCategory === value}
+                    onClick={() => selectCategory(value)}
+                  >
+                    {text}
+                  </Menu.Item>
+                ))}
+              </Menu>
+              {selectedCategory ? (
+                <Gallery photos={photos.current[selectedCategory]} />
+              ) : (
+                <Message
+                  info
+                  onClick={() =>
+                    selectCategory(
+                      getSafe(() => categories[0].value, undefined),
+                    )
+                  }
                 >
-                  {text}
-                </Menu.Item>
-              ))}
-            </Menu>
-            {selectedCategory ? (
-              <Gallery photos={photos.current[selectedCategory]} />
-            ) : (
-              <Message
-                info
-                onClick={() =>
-                  selectCategory(getSafe(() => categories[0].value, undefined))
-                }
-              >
-                Vyberte libovolnou kategorii.
-              </Message>
-            )}
-          </>
-        )}
-      </Categories>
+                  Vyberte libovolnou kategorii.
+                </Message>
+              )}
+            </>
+          )}
+        </Categories>
+      ) : (
+        <AskForAuthorization />
+      )}
+      <style jsx global>
+        {`
+          html body {
+            background-color: ${colors.black};
+            color: ${colors.whiteDirty};
+          }
+        `}
+      </style>
     </Container>
-  ) : (
-    <AskForAuthorization />
   );
 };
 

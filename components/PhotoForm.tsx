@@ -2,8 +2,16 @@ import React, { Dispatch, useEffect } from 'react';
 import { Formik, FieldArray } from 'formik';
 import { array, object, string } from 'yup';
 import 'firebase/firestore';
+import 'firebase/storage';
 import firebase from 'firebase/app';
-import { Button, Form, Item, Segment, Transition } from 'semantic-ui-react';
+import {
+  Button,
+  Form,
+  Item,
+  Progress,
+  Segment,
+  Transition,
+} from 'semantic-ui-react';
 import { Categories } from '../components/Categories';
 import { FirebaseType } from '../components/Firebase';
 import {
@@ -12,6 +20,7 @@ import {
   Photo,
   User,
   useStateValue,
+  ProgressStates,
 } from '../components/StateProvider';
 import { PhotoDetail } from '../components/PhotoDetail';
 
@@ -29,52 +38,71 @@ const Schema = object().shape({
     .max(10, ({ max }) => `Nelze nahrát víc než ${max} fotek.`),
 });
 
-async function fetchUploadedPhotos(
+function subscribeForPhotosUpdate(
   firebase: FirebaseType,
   dispatch: Dispatch<Action>,
   user: User,
 ) {
-  const db = await firebase.firestore();
-  const ref = await db.collection('photos').where('user', '==', user.uid);
-  const snapshot = await ref.get();
+  const db = firebase.firestore();
+  const ref = db.collection('photos').where('user', '==', user.uid);
 
-  const fetchedPhotos = snapshot.docs
-    .map(doc => ({
-      uid: doc.id,
-      ...(doc.data() as Photo),
-    }))
-    .reduce(
-      (photosById, photo) => ({
-        ...photosById,
-        [photo.uid]: { ...photo },
-      }),
-      {},
-    );
+  const unsubscribe = ref.onSnapshot(snapshot => {
+    const fetchedPhotos = snapshot.docs
+      .map(doc => ({
+        uid: doc.id,
+        ...(doc.data() as Photo),
+      }))
+      .reduce(
+        (photosById, photo) => ({
+          ...photosById,
+          [photo.uid]: { ...photo },
+        }),
+        {},
+      );
 
-  dispatch({
-    type: ActionType.uploadedPhotosFetched,
-    payload: {
-      fetchedPhotos,
-    },
+    dispatch({
+      type: ActionType.photosFetched,
+      payload: {
+        fetchedPhotos,
+      },
+    });
   });
+
+  return unsubscribe;
 }
 
 export const PhotoForm = () => {
-  const [{ uploadedFiles, user }, dispatch] = useStateValue();
+  const [{ uploadedFiles, photos, user }, dispatch] = useStateValue();
 
   useEffect(() => {
     if (firebase && user.isSignedIn) {
-      fetchUploadedPhotos(firebase, dispatch, user);
+      return subscribeForPhotosUpdate(firebase, dispatch, user);
     }
   }, [firebase, user.isSignedIn]);
+
   return (
     <div className="formWrapper">
+      {Object.entries(uploadedFiles).map(
+        ([uid, { progress, progressState }]) =>
+          progressState !== ProgressStates.inactive &&
+          !!progress &&
+          progress < 100 && (
+            <Progress
+              key={uid}
+              percent={progress}
+              progress
+              success={progress === 100}
+              disabled={progressState === ProgressStates.paused}
+              error={progressState === ProgressStates.error}
+            />
+          ),
+      )}
       <Categories firebase={firebase}>
         {categories => (
           <Formik
             initialValues={{
-              photos: uploadedFiles
-                ? Object.entries(uploadedFiles).map(
+              photos: photos
+                ? Object.entries(photos).map(
                     ([uid, { author, category, description }]) => ({
                       uid,
                       author,
@@ -90,21 +118,23 @@ export const PhotoForm = () => {
                 const db = await firebase.firestore();
                 const collection = db.collection('photos');
                 const batch = db.batch();
-                photos.forEach(({ uid, category, description, author }) => {
-                  const { name, url } = uploadedFiles[uid];
-                  batch.set(collection.doc(uid), {
-                    category,
-                    description,
-                    author,
-                    user: user.uid,
-                    name,
-                    url,
-                  });
-                });
+                photos.forEach(
+                  async ({ uid, category, description, author }) => {
+                    const name = uploadedFiles[uid]
+                      ? uploadedFiles[uid].name
+                      : '';
+                    batch.update(collection.doc(uid), {
+                      category,
+                      description,
+                      author,
+                      name,
+                      public: true,
+                    });
+                  },
+                );
 
                 await batch.commit();
               }
-              fetchUploadedPhotos(firebase, dispatch, user);
               actions.setSubmitting(false);
             }}
             validationSchema={Schema}
@@ -119,19 +149,22 @@ export const PhotoForm = () => {
                         values.photos.map(({ uid, category }, index) => {
                           const {
                             name,
-                            progress,
-                            progressState,
                             url,
-                          } = uploadedFiles[uid];
+                            thumbFilePath,
+                            viewFilePath,
+                          } = photos[uid];
+                          const uploadedName = uploadedFiles[uid]
+                            ? uploadedFiles[uid].name
+                            : '';
 
                           return (
                             <PhotoDetail
                               index={index}
-                              name={name}
+                              name={name || uploadedName}
                               category={category}
-                              progress={progress}
-                              progressState={progressState}
                               url={url}
+                              thumbFilePath={thumbFilePath}
+                              viewFilePath={viewFilePath}
                               categories={categories}
                               handleRemove={async () => {
                                 if (firebase) {
