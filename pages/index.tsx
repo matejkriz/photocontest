@@ -48,10 +48,10 @@ const Index = () => {
       Hledej fotografie spojené s existencí našeho střediska a přihlašuj je do
       následujících kategorií:
       <List as="ul">
-        <List.Item as="li">Dobrodružstvíd</List.Item>
-        <List.Item as="li">Zlomové okamžikyd</List.Item>
-        <List.Item as="li">Humord</List.Item>
-        <List.Item as="li">Přátelstvíd</List.Item>
+        <List.Item as="li">Dobrodružství</List.Item>
+        <List.Item as="li">Zlomové okamžiky</List.Item>
+        <List.Item as="li">Humor</List.Item>
+        <List.Item as="li">Přátelství</List.Item>
       </List>
       <Message>
         Fotografie budou hodnoceny vždy v rámci dané kategorie, každá kategorie

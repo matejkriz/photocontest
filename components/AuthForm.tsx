@@ -11,7 +11,6 @@ import 'firebase/firestore';
 
 const Schema = object().shape({
   name: string().required('Jméno je povinné.'),
-  secret: string().required('Heslo je povinné.'),
 });
 
 export function AuthForm() {
@@ -21,10 +20,9 @@ export function AuthForm() {
       <Formik
         initialValues={{
           name: user.name || '',
-          secret: '',
         }}
         enableReinitialize
-        onSubmit={async ({ name, secret }, actions) => {
+        onSubmit={async ({ name }, actions) => {
           if (firebase) {
             const db = await firebase.firestore();
             const userRef = db.collection('users').doc(user.uid);
@@ -36,8 +34,6 @@ export function AuthForm() {
               },
               { merge: true },
             );
-            const secretsRef = userRef.collection('credentials').doc('secrets');
-            secretsRef.set({ secret });
           }
           actions.setSubmitting(false);
           Router.push('/login');
@@ -64,28 +60,6 @@ export function AuthForm() {
                         touch && error
                           ? 'Doplň prosím jméno a přezdívku'
                           : 'Jan Novák – Buřtík'
-                      }
-                      {...field}
-                    />
-                  </Form.Field>
-                );
-              }}
-            />
-            <Field
-              name="secret"
-              render={({ field, form }: FieldProps) => {
-                const error = getIn(form.errors, field.name);
-                const touch = getIn(form.touched, field.name);
-                return (
-                  <Form.Field>
-                    <Form.Input
-                      label="Tajemství"
-                      type="password"
-                      error={
-                        touch &&
-                        error && {
-                          content: <ErrorMessage name={field.name} />,
-                        }
                       }
                       {...field}
                     />

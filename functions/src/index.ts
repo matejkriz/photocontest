@@ -1,6 +1,5 @@
 import * as functions from 'firebase-functions';
 import { handleThumbnails } from './thumbnails';
-import { handleClaim } from './claims';
 
 import * as admin from 'firebase-admin';
 admin.initializeApp();
@@ -14,7 +13,3 @@ admin.initializeApp();
 exports.generateThumbnail = functions.storage
   .object()
   .onFinalize(handleThumbnails);
-
-exports.modifyUser = functions.firestore
-  .document('users/{userID}/credentials/secrets')
-  .onWrite(handleClaim);
