@@ -3,7 +3,7 @@ import Router from 'next/router';
 import { useStateValue } from './StateProvider';
 import { object, string } from 'yup';
 import { Formik, Field, FieldProps, getIn, ErrorMessage } from 'formik';
-import { Button, Form, Segment } from 'semantic-ui-react';
+import { Button, Form, Message, Segment } from 'semantic-ui-react';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -17,6 +17,10 @@ export function AuthForm() {
   const [{ user }] = useStateValue();
   return (
     <Segment placeholder>
+      <Message info>
+        Uveď prosím své celé jméno s případnou přezdívkou. Pokud by tě nebylo
+        možné poznat, tvé hlasy a fotky by nemusely být uznány.
+      </Message>
       <Formik
         initialValues={{
           name: user.name || '',

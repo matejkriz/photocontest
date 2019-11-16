@@ -15,7 +15,8 @@ const LoginPage = ({ firebase }: Props) => {
   return (
     <Container>
       <h1>Přihlášení</h1>
-      {user.isSignedIn ? <AuthForm /> : <Auth firebase={firebase} />}
+      {firebase &&
+        (user.isSignedIn ? <AuthForm /> : <Auth firebase={firebase} />)}
     </Container>
   );
 };

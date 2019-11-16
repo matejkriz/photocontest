@@ -36,11 +36,11 @@ const Index = () => {
           {/* FIXME datum */}
         </List.Item>
         <List.Item as="li">
-          Hlasování bude spuštěno začátkem října a ukončeno 29. 2. 2019.d
+          Hlasování bude spuštěno začátkem října a ukončeno 29. 2. 2019.
           {/* FIXME datum */}
         </List.Item>
         <List.Item as="li">
-          Vyhlášení vítězů proběhne v rámci oslav 4. 4. 2020.d
+          Vyhlášení vítězů proběhne v rámci oslav 4. 4. 2020.
         </List.Item>
       </List>
       <Divider />

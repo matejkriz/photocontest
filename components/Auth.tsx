@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { FirebaseType } from './Firebase';
 import { useStateValue } from './StateProvider';
-import { Button, Segment } from 'semantic-ui-react';
+import { Button, Message, Segment } from 'semantic-ui-react';
 
 import firebaseApp from 'firebase/app';
 import 'firebase/auth';
@@ -45,39 +45,6 @@ export function Auth({ firebase }: Props) {
 
   useEffect(() => {
     if (firebase) {
-      let unsubscribe: (() => void) | null = null;
-      firebase.auth().onAuthStateChanged(userAuth => {
-        // Remove previous listener.
-        if (unsubscribe) {
-          unsubscribe();
-        }
-        // On user login add new listener.
-        if (userAuth) {
-          // Check if refresh is required.
-          unsubscribe = firebase
-            .firestore()
-            .collection('users')
-            .doc(userAuth.uid)
-            .onSnapshot(function handleUserChange(doc) {
-              const data = doc.data();
-
-              const refreshDate = !!data && data.refreshDate;
-              if (refreshDate && new Date() >= new Date(refreshDate)) {
-                // Force refresh to pick up the latest custom claims changes.
-                // Note this is always triggered on first call. Further optimization could be
-                // added to avoid the initial trigger when the token is issued and already contains
-                // the latest claims.
-
-                userAuth.getIdToken(true);
-              }
-            });
-        }
-      });
-    }
-  }, [firebase]);
-
-  useEffect(() => {
-    if (firebase) {
       // Wait in case the firebase UI instance is being deleted.
       // This can happen if you unmount/remount the element quickly.
       firebaseUiDeletion.then(() => {
@@ -109,6 +76,17 @@ export function Auth({ firebase }: Props) {
 
   return (
     <Segment placeholder>
+      <Message info>
+        <Message.Header>
+          Zadej prosím email, přes který bychom tě mohli kontaktovat v případě
+          výhry.
+        </Message.Header>
+        <p>
+          Raději se vyhni emailu u Seznamu, zprávy na něj občas chodí s velkým
+          zpožděním. Pokud jiný nemáš, doporučuji přejít třeba na{' '}
+          <a href="https://protonmail.com/">ProtonMail</a>.
+        </p>
+      </Message>
       <div id={firebaseUIContainerID} />
       {firebase && user.isSignedIn && (
         <Button onClick={() => firebase.auth().signOut()}>Odhlásit</Button>
