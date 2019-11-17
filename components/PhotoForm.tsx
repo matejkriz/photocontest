@@ -4,7 +4,14 @@ import { array, object, string } from 'yup';
 import 'firebase/firestore';
 import 'firebase/storage';
 import firebase from 'firebase/app';
-import { Button, Form, Item, Segment, Transition } from 'semantic-ui-react';
+import {
+  Button,
+  Form,
+  Icon,
+  Item,
+  Segment,
+  Transition,
+} from 'semantic-ui-react';
 import { Categories } from '../components/Categories';
 import { FirebaseType } from '../components/Firebase';
 import {
@@ -124,82 +131,89 @@ export const PhotoForm = () => {
               actions.setSubmitting(false);
             }}
             validationSchema={Schema}
-            render={({ values, handleReset, handleSubmit, isSubmitting }) => (
-              <Form inverted onReset={handleReset} onSubmit={handleSubmit}>
-                <FieldArray
-                  name="photos"
-                  render={({ remove }) => (
-                    <Item.Group>
-                      {values.photos &&
-                        values.photos.length > 0 &&
-                        values.photos.map(({ uid, category }, index) => {
-                          const photo = photos[uid] || {};
-                          const file = uploadedFiles[uid] || {};
+          >
+            {({ values, handleReset, handleSubmit, isSubmitting, dirty }) => {
+              const needsSave = dirty || !Schema.isValidSync(values);
+              return (
+                <Form inverted onReset={handleReset} onSubmit={handleSubmit}>
+                  <FieldArray
+                    name="photos"
+                    render={({ remove }) => (
+                      <Item.Group>
+                        {values.photos &&
+                          values.photos.length > 0 &&
+                          values.photos.map(({ uid, category }, index) => {
+                            const photo = photos[uid] || {};
+                            const file = uploadedFiles[uid] || {};
 
-                          const {
-                            name,
-                            url,
-                            thumbFilePath,
-                            viewFilePath,
-                          } = photo;
-                          const {
-                            name: fileName,
-                            progress,
-                            progressState,
-                          } = file;
-                          return (
-                            <PhotoDetail
-                              index={index}
-                              name={name || fileName}
-                              progress={progress}
-                              progressState={progressState}
-                              category={category}
-                              url={url}
-                              thumbFilePath={thumbFilePath}
-                              viewFilePath={viewFilePath}
-                              categories={categories}
-                              handleRemove={async () => {
-                                if (firebase) {
-                                  const db = await firebase.firestore();
-                                  await db
-                                    .collection('photos')
-                                    .doc(uid)
-                                    .delete();
-                                  dispatch({
-                                    type: ActionType.fileRemoved,
-                                    payload: {
-                                      uid,
-                                    },
-                                  });
-                                  remove(index);
-                                }
-                              }}
-                              key={uid}
-                            />
-                          );
-                        })}
-                    </Item.Group>
-                  )}
-                />
-                <Transition.Group animation="fly up" duration={600}>
-                  {values.photos && values.photos.length > 0 && (
-                    <div className="submitWrapper">
-                      <Segment inverted textAlign="center">
-                        <Button
-                          color="yellow"
-                          type="submit"
-                          disabled={isSubmitting}
-                          size="massive"
-                        >
-                          Uložit
-                        </Button>
-                      </Segment>
-                    </div>
-                  )}
-                </Transition.Group>
-              </Form>
-            )}
-          />
+                            const {
+                              name,
+                              url,
+                              thumbFilePath,
+                              viewFilePath,
+                            } = photo;
+                            const {
+                              name: fileName,
+                              progress,
+                              progressState,
+                            } = file;
+                            return (
+                              <PhotoDetail
+                                index={index}
+                                name={name || fileName}
+                                progress={progress}
+                                progressState={progressState}
+                                category={category}
+                                url={url}
+                                thumbFilePath={thumbFilePath}
+                                viewFilePath={viewFilePath}
+                                categories={categories}
+                                handleRemove={async () => {
+                                  if (firebase) {
+                                    const db = await firebase.firestore();
+                                    await db
+                                      .collection('photos')
+                                      .doc(uid)
+                                      .delete();
+                                    dispatch({
+                                      type: ActionType.fileRemoved,
+                                      payload: {
+                                        uid,
+                                      },
+                                    });
+                                    remove(index);
+                                  }
+                                }}
+                                key={uid}
+                              />
+                            );
+                          })}
+                      </Item.Group>
+                    )}
+                  />
+                  <Transition.Group animation="fly up" duration={600}>
+                    {values.photos && values.photos.length > 0 && (
+                      <div className="submitWrapper">
+                        <Segment inverted textAlign="center">
+                          <Button
+                            color={needsSave ? 'yellow' : 'green'}
+                            type="submit"
+                            disabled={isSubmitting}
+                            size={needsSave ? 'massive' : 'huge'}
+                          >
+                            <>
+                              {needsSave || <Icon name="check" />}
+                              {needsSave ? 'Uložit' : 'Uloženo'}
+                            </>
+                          </Button>
+                        </Segment>
+                      </div>
+                    )}
+                  </Transition.Group>
+                </Form>
+              );
+            }}
+          </Formik>
         )}
       </Categories>
       <style jsx>{`
