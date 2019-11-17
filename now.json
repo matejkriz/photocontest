@@ -1,7 +1,15 @@
 {
   "name": "photocontest",
   "version": 2,
-  "alias": ["uragan-fotosoutez"],
+  "alias": [
+    "uragan-fotosoutez",
+    "uragan_fotosoutez",
+    "uraganfotosoutez",
+    "fotosoutez-uragan",
+    "fotosoutezuragan",
+    "fotosoutez",
+    "uragan"
+  ],
   "builds": [{ "src": "next.config.js", "use": "@now/next" }],
   "build": {
     "env": {

@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import {
   Container,
   Divider,
@@ -130,9 +131,12 @@ const Index = () => {
           hodnotit.
         </List.Item>
         <List.Item as="li">
-          Za tímto účelem si prosím zřiď jednoduchý účet pod svým vlastním
-          jménem, který bude sloužit i jako ověření, že jsi byl, nebo stále jsi
-          členem střediska.
+          Za tímto účelem si prosím{' '}
+          <Link href="/login">
+            <a>zřiď jednoduchý účet</a>
+          </Link>{' '}
+          pod svým vlastním jménem, který bude sloužit i jako ověření, že jsi
+          byl, nebo stále jsi členem střediska.
         </List.Item>
       </List>
       <Divider />
