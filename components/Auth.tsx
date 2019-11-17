@@ -53,6 +53,7 @@ export function Auth({ firebase }: Props) {
         const firebaseUiWidget =
           authUI.getInstance() || new authUI(firebase.auth());
 
+        // The start method will wait until the DOM is loaded.
         firebaseUiWidget.start(`#${firebaseUIContainerID}`, uiConfig);
 
         return () => {

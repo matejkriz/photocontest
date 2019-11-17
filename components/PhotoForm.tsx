@@ -4,14 +4,7 @@ import { array, object, string } from 'yup';
 import 'firebase/firestore';
 import 'firebase/storage';
 import firebase from 'firebase/app';
-import {
-  Button,
-  Form,
-  Item,
-  Progress,
-  Segment,
-  Transition,
-} from 'semantic-ui-react';
+import { Button, Form, Item, Segment, Transition } from 'semantic-ui-react';
 import { Categories } from '../components/Categories';
 import { FirebaseType } from '../components/Firebase';
 import {
@@ -19,7 +12,6 @@ import {
   ActionType,
   Photo,
   useStateValue,
-  ProgressStates,
 } from '../components/StateProvider';
 import { PhotoDetail } from '../components/PhotoDetail';
 
@@ -84,38 +76,26 @@ export const PhotoForm = () => {
     if (firebase && isSignedIn) {
       return subscribeForPhotosUpdate(firebase, dispatch, uid);
     }
-  }, [dispatch, isSignedIn]);
+  }, [dispatch, isSignedIn, uid]);
+
+  const allPhotos = {
+    ...uploadedFiles,
+    ...photos,
+  };
 
   return (
     <div className="formWrapper">
-      {Object.entries(uploadedFiles).map(
-        ([uid, { progress, progressState }]) =>
-          progressState !== ProgressStates.inactive &&
-          !!progress &&
-          progress < 100 && (
-            <Progress
-              key={uid}
-              percent={progress}
-              progress
-              success={progress === 100}
-              disabled={progressState === ProgressStates.paused}
-              error={progressState === ProgressStates.error}
-            />
-          ),
-      )}
       <Categories firebase={firebase}>
         {categories => (
           <Formik
             initialValues={{
-              photos: photos
-                ? Object.entries(photos).map(
-                    ([uid, { author, category, description }]) => ({
-                      uid,
-                      author,
-                      category,
-                      description,
-                    }),
-                  )
+              photos: allPhotos
+                ? Object.entries(allPhotos).map(([uid, photo]) => ({
+                    uid,
+                    author: photo.author || '',
+                    category: photo.category || '',
+                    description: photo.description || '',
+                  }))
                 : [],
             }}
             enableReinitialize
@@ -153,20 +133,26 @@ export const PhotoForm = () => {
                       {values.photos &&
                         values.photos.length > 0 &&
                         values.photos.map(({ uid, category }, index) => {
+                          const photo = photos[uid] || {};
+                          const file = uploadedFiles[uid] || {};
+
                           const {
                             name,
                             url,
                             thumbFilePath,
                             viewFilePath,
-                          } = photos[uid];
-                          const uploadedName = uploadedFiles[uid]
-                            ? uploadedFiles[uid].name
-                            : '';
-
+                          } = photo;
+                          const {
+                            name: fileName,
+                            progress,
+                            progressState,
+                          } = file;
                           return (
                             <PhotoDetail
                               index={index}
-                              name={name || uploadedName}
+                              name={name || fileName}
+                              progress={progress}
+                              progressState={progressState}
                               category={category}
                               url={url}
                               thumbFilePath={thumbFilePath}
@@ -179,6 +165,12 @@ export const PhotoForm = () => {
                                     .collection('photos')
                                     .doc(uid)
                                     .delete();
+                                  dispatch({
+                                    type: ActionType.fileRemoved,
+                                    payload: {
+                                      uid,
+                                    },
+                                  });
                                   remove(index);
                                 }
                               }}

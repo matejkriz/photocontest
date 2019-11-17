@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, Dispatch } from 'react';
 import { withRouter, SingletonRouter } from 'next/router';
 import Link from 'next/link';
 import { Menu as MenuUI } from 'semantic-ui-react';
-import { useStateValue } from './StateProvider';
+import { useStateValue, Action, User, ActionType } from './StateProvider';
 import { FirebaseType } from './Firebase';
 
 interface Props {
@@ -10,8 +10,32 @@ interface Props {
   firebase?: FirebaseType;
 }
 
+async function fetchUser(
+  { uid }: User,
+  firebase: FirebaseType,
+  dispatch: Dispatch<Action>,
+) {
+  const db = await firebase.firestore();
+  const doc = await db
+    .collection('users')
+    .doc(uid)
+    .get();
+  const user = await doc.data();
+  dispatch({
+    type: ActionType.userFetched,
+    payload: {
+      user,
+    },
+  });
+}
+
 const MenuComponent = ({ router, firebase }: Props) => {
-  const [{ user }] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
+  useEffect(() => {
+    if (firebase && user.isSignedIn) {
+      fetchUser(user, firebase, dispatch);
+    }
+  }, [firebase, user.isSignedIn]);
   return (
     <MenuUI
       pointing

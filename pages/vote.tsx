@@ -61,6 +61,10 @@ const VotingPage = ({ firebase }: Props) => {
         <Categories firebase={firebase}>
           {categories => (
             <>
+              <Message info>
+                Hlasování bude spuštěno 1. 1. 2020! Zatím si můžeš prohlížet
+                přihlášené fotografie.
+              </Message>
               <Menu tabular stackable inverted>
                 <Menu.Item header>Kategorie:</Menu.Item>
                 {categories.map(({ key, value, text }) => (
@@ -78,7 +82,7 @@ const VotingPage = ({ firebase }: Props) => {
                 <Gallery photos={photos.current[selectedCategory]} />
               ) : (
                 <Message
-                  info
+                  warning
                   onClick={() =>
                     selectCategory(
                       getSafe(() => categories[0].value, undefined),

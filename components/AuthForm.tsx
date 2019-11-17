@@ -1,6 +1,6 @@
 import React from 'react';
 import Router from 'next/router';
-import { useStateValue } from './StateProvider';
+import { useStateValue, ActionType } from './StateProvider';
 import { object, string } from 'yup';
 import { Formik, Field, FieldProps, getIn, ErrorMessage } from 'formik';
 import { Button, Form, Message, Segment } from 'semantic-ui-react';
@@ -14,7 +14,8 @@ const Schema = object().shape({
 });
 
 export function AuthForm() {
-  const [{ user }] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
+
   return (
     <Segment placeholder>
       <Message info>
@@ -38,6 +39,12 @@ export function AuthForm() {
               },
               { merge: true },
             );
+            dispatch({
+              type: ActionType.userNameProvided,
+              payload: {
+                name,
+              },
+            });
           }
           actions.setSubmitting(false);
           Router.push('/upload');

@@ -35,10 +35,12 @@ export interface Action<P = any> {
 export enum ActionType {
   authStateChanged = 'authStateChanged',
   fileUploaded = 'fileUploaded',
+  fileRemoved = 'fileRemoved',
   progressStateUpdate = 'progressStateUpdate',
   progressUpdate = 'progressUpdate',
   photosFetched = 'photosFetched',
-  userUpdated = 'userUpdated',
+  userFetched = 'userFetched',
+  userNameProvided = 'userNameProvided',
 }
 
 export enum ProgressStates {
@@ -48,7 +50,7 @@ export enum ProgressStates {
   error = 'error',
 }
 
-export interface File {
+export interface File extends Partial<Photo> {
   uid?: string;
   url: string;
   name: string;
@@ -61,7 +63,7 @@ export interface Photo {
   url: string;
   viewFilePath: string;
   thumbFilePath: string;
-  name: string;
+  name?: string;
   category: string;
   description?: string;
   author?: string;
@@ -101,6 +103,13 @@ export const initialState = {
 
 export const userReducer = (state: State, action: Action) => {
   switch (action.type) {
+    case ActionType.userFetched: {
+      const { user } = action.payload;
+      return {
+        ...state.user,
+        ...user,
+      };
+    }
     case ActionType.authStateChanged: {
       const { user } = action.payload;
       return {
@@ -108,11 +117,11 @@ export const userReducer = (state: State, action: Action) => {
         ...user,
       };
     }
-    case ActionType.userUpdated: {
-      const { user } = action.payload;
+    case ActionType.userNameProvided: {
+      const { name } = action.payload;
       return {
         ...state.user,
-        ...user,
+        name,
       };
     }
     default: {
@@ -133,6 +142,13 @@ export const fileReducer = (state: State, action: Action) => {
           url,
           name,
         },
+      };
+    }
+    case ActionType.fileRemoved: {
+      const { uid } = action.payload;
+      return {
+        ...state.uploadedFiles,
+        [uid]: undefined,
       };
     }
     case ActionType.progressUpdate: {
@@ -188,38 +204,19 @@ interface Props {
   firebase?: FirebaseType;
 }
 
-function subscribeForUserUpdate(
-  firebase: FirebaseType,
-  dispatch: Dispatch<Action>,
-  user: User,
-) {
-  const db = firebase.firestore();
-  const ref = db.collection('users').doc(user.uid);
-
-  const unsubscribe = ref.onSnapshot(snapshot => {
-    dispatch({
-      type: ActionType.userUpdated,
-      payload: {
-        user: snapshot.data(),
-      },
-    });
-  });
-
-  return unsubscribe;
-}
-
 export const StateProvider: React.FunctionComponent<Props> = ({
   children,
   firebase,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const isSignedIn = !!state.user.isSignedIn;
 
   useEffect(() => {
     if (firebase) {
       const unregisterAuthObserver = firebase
         .auth()
         .onAuthStateChanged(userAuth => {
+          console.log('authstatechanged', userAuth);
+
           dispatch({
             type: ActionType.authStateChanged,
             payload: {
@@ -238,13 +235,6 @@ export const StateProvider: React.FunctionComponent<Props> = ({
       };
     }
   }, [firebase]);
-
-  useEffect(() => {
-    const { user } = state;
-    if (firebase && isSignedIn) {
-      return subscribeForUserUpdate(firebase, dispatch, user);
-    }
-  }, [firebase, isSignedIn, state]);
 
   return (
     <StateContext.Provider value={[state, dispatch]}>
