@@ -11,7 +11,7 @@ const UploadPage = () => {
 
   return (
     <Container>
-      {user.isSignedIn ? (
+      {user.isSignedIn && user.name ? (
         <>
           <Dropzone />
           <PhotoForm />

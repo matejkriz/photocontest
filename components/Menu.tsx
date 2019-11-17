@@ -34,10 +34,16 @@ const MenuComponent = ({ router, firebase }: Props) => {
       </Link>
 
       <MenuUI.Menu position="right">
-        {user.isSignedIn && firebase ? (
+        {user.isSignedIn && user.name && firebase ? (
           <MenuUI.Item onClick={() => firebase.auth().signOut()}>
             Odhlásit
           </MenuUI.Item>
+        ) : user.isSignedIn && !user.name ? (
+          <Link href="/login" passHref>
+            <MenuUI.Item active={router.pathname.startsWith('/login')}>
+              Zadat jméno
+            </MenuUI.Item>
+          </Link>
         ) : (
           <Link href="/login" passHref>
             <MenuUI.Item active={router.pathname.startsWith('/login')}>

@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { FirebaseType } from './Firebase';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 export interface User {
   isSignedIn?: boolean;
@@ -37,6 +38,7 @@ export enum ActionType {
   progressStateUpdate = 'progressStateUpdate',
   progressUpdate = 'progressUpdate',
   photosFetched = 'photosFetched',
+  userUpdated = 'userUpdated',
 }
 
 export enum ProgressStates {
@@ -99,15 +101,23 @@ export const initialState = {
 
 export const userReducer = (state: State, action: Action) => {
   switch (action.type) {
-    case ActionType.authStateChanged:
+    case ActionType.authStateChanged: {
       const { user } = action.payload;
       return {
         ...state.user,
         ...user,
       };
-
-    default:
+    }
+    case ActionType.userUpdated: {
+      const { user } = action.payload;
+      return {
+        ...state.user,
+        ...user,
+      };
+    }
+    default: {
       return state.user;
+    }
   }
 };
 
@@ -178,11 +188,33 @@ interface Props {
   firebase?: FirebaseType;
 }
 
+function subscribeForUserUpdate(
+  firebase: FirebaseType,
+  dispatch: Dispatch<Action>,
+  user: User,
+) {
+  const db = firebase.firestore();
+  const ref = db.collection('users').doc(user.uid);
+
+  const unsubscribe = ref.onSnapshot(snapshot => {
+    dispatch({
+      type: ActionType.userUpdated,
+      payload: {
+        user: snapshot.data(),
+      },
+    });
+  });
+
+  return unsubscribe;
+}
+
 export const StateProvider: React.FunctionComponent<Props> = ({
   children,
   firebase,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const isSignedIn = !!state.user.isSignedIn;
+
   useEffect(() => {
     if (firebase) {
       const unregisterAuthObserver = firebase
@@ -195,7 +227,6 @@ export const StateProvider: React.FunctionComponent<Props> = ({
                 ? {
                     isSignedIn: true,
                     email: `${userAuth.email}`,
-                    name: '',
                     uid: userAuth.uid,
                   }
                 : { initialUserState, isSignedIn: false },
@@ -207,6 +238,13 @@ export const StateProvider: React.FunctionComponent<Props> = ({
       };
     }
   }, [firebase]);
+
+  useEffect(() => {
+    const { user } = state;
+    if (firebase && isSignedIn) {
+      return subscribeForUserUpdate(firebase, dispatch, user);
+    }
+  }, [firebase, isSignedIn, state]);
 
   return (
     <StateContext.Provider value={[state, dispatch]}>

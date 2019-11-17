@@ -18,7 +18,6 @@ import {
   Action,
   ActionType,
   Photo,
-  User,
   useStateValue,
   ProgressStates,
 } from '../components/StateProvider';
@@ -41,10 +40,10 @@ const Schema = object().shape({
 function subscribeForPhotosUpdate(
   firebase: FirebaseType,
   dispatch: Dispatch<Action>,
-  user: User,
+  uid: string,
 ) {
   const db = firebase.firestore();
-  const ref = db.collection('photos').where('user', '==', user.uid);
+  const ref = db.collection('photos').where('user', '==', uid);
 
   const unsubscribe = ref.onSnapshot(snapshot => {
     const fetchedPhotos = snapshot.docs
@@ -72,13 +71,20 @@ function subscribeForPhotosUpdate(
 }
 
 export const PhotoForm = () => {
-  const [{ uploadedFiles, photos, user }, dispatch] = useStateValue();
+  const [
+    {
+      uploadedFiles,
+      photos,
+      user: { isSignedIn, uid },
+    },
+    dispatch,
+  ] = useStateValue();
 
   useEffect(() => {
-    if (firebase && user.isSignedIn) {
-      return subscribeForPhotosUpdate(firebase, dispatch, user);
+    if (firebase && isSignedIn) {
+      return subscribeForPhotosUpdate(firebase, dispatch, uid);
     }
-  }, [firebase, user.isSignedIn]);
+  }, [dispatch, isSignedIn]);
 
   return (
     <div className="formWrapper">

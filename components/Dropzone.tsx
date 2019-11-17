@@ -10,64 +10,6 @@ export function Dropzone() {
   const [error, setError] = useState('');
   const [{ user }, dispatch] = useStateValue();
 
-  const handleSuccess = async ({
-    uuid,
-    name,
-    uploadTask,
-  }: {
-    uuid: string;
-    name: string;
-    uploadTask: firebase.storage.UploadTask;
-  }) => {
-    // Upload completed successfully, now we can get the download URL
-    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-    dispatch({
-      type: ActionType.fileUploaded,
-      payload: {
-        uuid,
-        name,
-        url: encodeURIComponent(downloadURL),
-      },
-    });
-  };
-
-  const handleSnapshot = ({
-    uuid,
-    bytesTransferred,
-    totalBytes,
-    state,
-  }: { uuid: string } & firebase.storage.UploadTaskSnapshot) => {
-    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-    dispatch({
-      type: ActionType.progressUpdate,
-      payload: {
-        uuid,
-        progress: Math.round((bytesTransferred / totalBytes) * 100),
-      },
-    });
-
-    switch (state) {
-      case firebase.storage.TaskState.PAUSED:
-        dispatch({
-          type: ActionType.progressStateUpdate,
-          payload: {
-            uuid,
-            progressState: ProgressStates.paused,
-          },
-        });
-        break;
-      case firebase.storage.TaskState.RUNNING:
-        dispatch({
-          type: ActionType.progressStateUpdate,
-          payload: {
-            uuid,
-            progressState: ProgressStates.active,
-          },
-        });
-        break;
-    }
-  };
-
   const handleError = (error: Error) => {
     setError(error.message);
     // A full list of error codes is available at
@@ -103,6 +45,64 @@ export function Dropzone() {
         reader.onabort = () => console.log('file reading was aborted');
         reader.onerror = () => console.log('file reading has failed');
 
+        const handleSuccess = async ({
+          uuid,
+          name,
+          uploadTask,
+        }: {
+          uuid: string;
+          name: string;
+          uploadTask: firebase.storage.UploadTask;
+        }) => {
+          // Upload completed successfully, now we can get the download URL
+          const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+          dispatch({
+            type: ActionType.fileUploaded,
+            payload: {
+              uuid,
+              name,
+              url: encodeURIComponent(downloadURL),
+            },
+          });
+        };
+
+        const handleSnapshot = ({
+          uuid,
+          bytesTransferred,
+          totalBytes,
+          state,
+        }: { uuid: string } & firebase.storage.UploadTaskSnapshot) => {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          dispatch({
+            type: ActionType.progressUpdate,
+            payload: {
+              uuid,
+              progress: Math.round((bytesTransferred / totalBytes) * 100),
+            },
+          });
+
+          switch (state) {
+            case firebase.storage.TaskState.PAUSED:
+              dispatch({
+                type: ActionType.progressStateUpdate,
+                payload: {
+                  uuid,
+                  progressState: ProgressStates.paused,
+                },
+              });
+              break;
+            case firebase.storage.TaskState.RUNNING:
+              dispatch({
+                type: ActionType.progressStateUpdate,
+                payload: {
+                  uuid,
+                  progressState: ProgressStates.active,
+                },
+              });
+              break;
+          }
+        };
+
         acceptedFiles.forEach(file => {
           const uuid = getUUID();
           // Upload file and metadata to the object 'images/mountains.jpg'
@@ -120,7 +120,7 @@ export function Dropzone() {
         });
       }
     },
-    [],
+    [dispatch, user.uid],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

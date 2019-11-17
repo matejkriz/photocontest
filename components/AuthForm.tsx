@@ -40,7 +40,7 @@ export function AuthForm() {
             );
           }
           actions.setSubmitting(false);
-          Router.push('/login');
+          Router.push('/upload');
         }}
         validationSchema={Schema}
         render={({ handleReset, handleSubmit, isSubmitting }) => (

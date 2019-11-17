@@ -53,20 +53,11 @@ export function Auth({ firebase }: Props) {
         const firebaseUiWidget =
           authUI.getInstance() || new authUI(firebase.auth());
 
-        // The start method will wait until the DOM is loaded.
         firebaseUiWidget.start(`#${firebaseUIContainerID}`, uiConfig);
 
-        const unregisterAuthObserver = firebase
-          .auth()
-          .onAuthStateChanged(userAuth => {
-            if (!userAuth && user.isSignedIn) {
-              firebaseUiWidget.reset();
-            }
-          });
         return () => {
           // Clean up the subscription
           firebaseUiDeletion = firebaseUiDeletion.then(() => {
-            unregisterAuthObserver();
             return firebaseUiWidget.delete();
           });
         };
@@ -82,9 +73,8 @@ export function Auth({ firebase }: Props) {
           výhry.
         </Message.Header>
         <p>
-          Raději se vyhni emailu u Seznamu, zprávy na něj občas chodí s velkým
-          zpožděním. Pokud jiný nemáš, doporučuji přejít třeba na{' '}
-          <a href="https://protonmail.com/">ProtonMail</a>.
+          Pokud máš mail u Seznamu, možná bude trochu trvat, než ti dorazí
+          přihlašovací odkaz.
         </p>
       </Message>
       <div id={firebaseUIContainerID} />

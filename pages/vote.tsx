@@ -57,7 +57,7 @@ const VotingPage = ({ firebase }: Props) => {
   }, [firebase, user.isSignedIn]);
   return (
     <Container>
-      {user.isSignedIn ? (
+      {user.isSignedIn && user.name ? (
         <Categories firebase={firebase}>
           {categories => (
             <>
