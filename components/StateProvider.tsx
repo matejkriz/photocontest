@@ -215,8 +215,6 @@ export const StateProvider: React.FunctionComponent<Props> = ({
       const unregisterAuthObserver = firebase
         .auth()
         .onAuthStateChanged(userAuth => {
-          console.log('authstatechanged', userAuth);
-
           dispatch({
             type: ActionType.authStateChanged,
             payload: {

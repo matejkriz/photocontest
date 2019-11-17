@@ -32,7 +32,7 @@ async function fetchUser(
 const MenuComponent = ({ router, firebase }: Props) => {
   const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
-    if (firebase && user.isSignedIn) {
+    if (firebase && user.isSignedIn && !user.name) {
       fetchUser(user, firebase, dispatch);
     }
   }, [firebase, user.isSignedIn]);
