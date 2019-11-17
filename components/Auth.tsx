@@ -68,15 +68,9 @@ export function Auth({ firebase }: Props) {
 
   return (
     <Segment placeholder>
-      <Message info>
-        <Message.Header>
-          Zadej prosím email, přes který bychom tě mohli kontaktovat v případě
-          výhry.
-        </Message.Header>
-        <p>
-          Pokud máš mail u Seznamu, možná bude trochu trvat, než ti dorazí
-          přihlašovací odkaz.
-        </p>
+      <Message warning>
+        Pokud použiješ mail u Seznamu, možná bude trochu trvat, než ti dorazí
+        přihlašovací odkaz.
       </Message>
       <div id={firebaseUIContainerID} />
       {firebase && user.isSignedIn && (

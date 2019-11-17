@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 import { Auth } from '../components/Auth';
 import { AuthForm } from '../components/AuthForm';
 import { FirebaseType } from '../components/Firebase';
@@ -14,7 +14,7 @@ const LoginPage = ({ firebase }: Props) => {
 
   return (
     <Container>
-      <h1>Přihlášení</h1>
+      <Header as="h1">Přihlášení</Header>
       {firebase &&
         (user.isSignedIn ? <AuthForm /> : <Auth firebase={firebase} />)}
     </Container>
