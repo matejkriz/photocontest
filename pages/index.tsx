@@ -23,21 +23,26 @@ const Index = () => {
         alt="Skaut s foťákem místo hlavy"
       />
       <Header as="h2">PRAVIDLA</Header>
-      <Message>
-        K příležitosti oslav třicetiletého výročí našeho střediska, vyhlašujeme
-        fotografickou soutěž. Možná právě ty jsi autorem fotky třicetiletí, tak
-        neváhej a vydej se vstříc svému fotoarchivu!
+      <Message info>
+        <Message.Header>
+          K příležitosti oslav třicetiletého výročí našeho střediska,
+          vyhlašujeme fotografickou soutěž.
+        </Message.Header>
+        <p>
+          Možná právě ty jsi autorem fotky třicetiletí, tak neváhej a vydej se
+          vstříc svému fotoarchivu!
+        </p>
       </Message>
       <Divider />
       <Header as="h3">TERMÍNY</Header>
       <List as="ul">
         <List.Item as="li">
-          Přihlašování fotografií je již spuštěno, ukončeno bude 30. 9. 2019.
-          {/* FIXME datum */}
+          <strong>Přihlašování fotografií je již spuštěno!</strong> Ukončeno
+          bude <strong>31. 12. 2019</strong>.
         </List.Item>
         <List.Item as="li">
-          Hlasování bude spuštěno začátkem října a ukončeno 29. 2. 2019.
-          {/* FIXME datum */}
+          Hlasování bude spuštěno <strong>1. 1. 2020</strong> a ukončeno{' '}
+          <strong>31. 1. 2020</strong>.
         </List.Item>
         <List.Item as="li">
           Vyhlášení vítězů proběhne v rámci oslav 4. 4. 2020.
@@ -65,16 +70,16 @@ const Index = () => {
       <Header as="h3">FOTOGRAFIE</Header>
       <List as="ul">
         <List.Item as="li">
-          Do soutěže můžeš přihlásit maximálně <b>10 fotografií</b> napříč
-          kategoriemi. Je tedy na tobě, zda do jedné kategorie přihlásíš fotek 9
-          a do druhé jen 1.
+          Do soutěže můžeš přihlásit maximálně <strong>10 fotografií</strong>{' '}
+          napříč kategoriemi. Je tedy na tobě, zda do jedné kategorie přihlásíš
+          fotek 9 a do druhé jen 1.
         </List.Item>
         <List.Item as="li">
           Fotografie nahrávej v plné kvalitě. Je samozřejmě možné přihlásit i
           sken staré fotografie, kterou nemáš v digitální podobě.
         </List.Item>
         <List.Item as="li">
-          K přihlašovaným fotografiím se pokusit zjistit co nepřesněji co
+          K přihlašovaným fotografiím se pokus zjistit co nepřesněji co
           zachycuje (akce, termín, jména lidí, kteří jsou na fotografii…) Tyto
           údaje se budou uvádět do popisu fotografie a budou uveřejněny.
         </List.Item>
@@ -155,7 +160,7 @@ const Index = () => {
           Pokud byste měli jakékoliv otázky, neváhejte nás kontaktovat:
           <List.List>
             <List.Item>Flíček - 607535669, krizova.bety@gmail.com</List.Item>
-            <List.Item>Matěj - 775224369, matej@matejkriz.cz</List.Item>
+            <List.Item>Matěj - 775224369, matej@skaut.cz</List.Item>
           </List.List>
         </List.Item>
       </List>
