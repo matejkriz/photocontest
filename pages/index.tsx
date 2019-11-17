@@ -138,7 +138,7 @@ const Index = () => {
       <Divider />
       <Header as="h3">OSTATNÍ</Header>
       <List as="ul">
-        <List.Item as="li">Soutěžíme o věcné ceny!</List.Item>
+        <List.Item as="li">Soutěžíme o věcné ceny a věčnou slávu!</List.Item>
         <List.Item as="li">
           Pokud bys v rámci procházení svého archivu narazil na další zajímavé
           fotografie, mapující život střediska, které by neměly upadnout v
