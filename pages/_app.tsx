@@ -1,5 +1,5 @@
 import React from 'react';
-import App, { Container } from 'next/app';
+import App from 'next/app';
 import { Firebase } from '../components/Firebase';
 import { Menu } from '../components/Menu';
 import { StateProvider } from '../components/StateProvider';
@@ -11,27 +11,24 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
 
     return (
-      <Container>
-        <ErrorBoundary>
-          <Firebase>
-            {firebase => (
-              <StateProvider firebase={firebase}>
-                <Menu firebase={firebase} />
-                <Component firebase={firebase} {...pageProps} />
-              </StateProvider>
-            )}
-          </Firebase>
-        </ErrorBoundary>
-
-        <style jsx global>
-          {`
-            body {
-              background-color: ${colors.grayBright};
-              color: ${colors.black};
-            }
-          `}
-        </style>
-      </Container>
+      <ErrorBoundary>
+        <Firebase>
+          {firebase => (
+            <StateProvider firebase={firebase}>
+              <Menu firebase={firebase} />
+              <Component firebase={firebase} {...pageProps} />
+              <style jsx global>
+                {`
+                  body {
+                    background-color: ${colors.grayBright};
+                    color: ${colors.black};
+                  }
+                `}
+              </style>
+            </StateProvider>
+          )}
+        </Firebase>
+      </ErrorBoundary>
     );
   }
 }
