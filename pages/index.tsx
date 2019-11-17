@@ -24,7 +24,7 @@ const Index = () => {
         alt="Skaut s foťákem místo hlavy"
       />
       <Header as="h2">PRAVIDLA</Header>
-      <Message info>
+      <Message color="yellow">
         <Message.Header>
           K příležitosti oslav třicetiletého výročí našeho střediska,
           vyhlašujeme fotografickou soutěž.
@@ -168,6 +168,7 @@ const Index = () => {
           </List.List>
         </List.Item>
       </List>
+      <Divider />
     </Container>
   );
 };
