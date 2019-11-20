@@ -46,7 +46,7 @@ const Index = () => {
           <strong>31. 1. 2020</strong>.
         </List.Item>
         <List.Item as="li">
-          Vyhlášení vítězů proběhne v rámci oslav 4. 4. 2020.
+          Vyhlášení vítězů proběhne v rámci oslav výročí.
         </List.Item>
       </List>
       <Divider />
