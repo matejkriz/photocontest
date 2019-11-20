@@ -76,8 +76,8 @@ const Index = () => {
           fotek 9 a do druhé jen 1.
         </List.Item>
         <List.Item as="li">
-          Fotografie nahrávej v plné kvalitě. Je samozřejmě možné přihlásit i
-          sken staré fotografie, kterou nemáš v digitální podobě.
+          Fotografie nahrávej v co nejvyšší kvalitě. Je samozřejmě možné
+          přihlásit i sken staré fotografie, kterou nemáš v digitální podobě.
         </List.Item>
         <List.Item as="li">
           K přihlašovaným fotografiím se pokus zjistit co nepřesněji co
@@ -96,8 +96,8 @@ const Index = () => {
         </List.Item>
         <List.Item as="li">
           Přihlásit lze i fotografii, jiného autora. A to pouze v případě, že
-          nelze autora dohledat, nebo se autor fotografie nechce zúčastnit a dá
-          ti svolení k přihlášení.
+          jsi nedokázal autora dohledat, nebo se autor fotografie nechce
+          zúčastnit a dá ti svolení k přihlášení.
         </List.Item>
       </List>
       <Divider />
@@ -146,8 +146,9 @@ const Index = () => {
         <List.Item as="li">
           Pokud bys v rámci procházení svého archivu narazil na další zajímavé
           fotografie, mapující život střediska, které by neměly upadnout v
-          zapomnění a nechceš je do soutěže přihlásit, předej je prosím Matějovi
-          nebo Flíčkovi. Fotografie budou využity pro účely výstavy.
+          zapomnění a nechceš je do soutěže přihlásit, předej je prosím také do
+          31. 12. 2019 Matějovi nebo Flíčkovi. Fotografie budou využity pro
+          účely výstavy a brožury o historii střediska.
         </List.Item>
         <List.Item as="li">
           Není potřeba zdůrazňovat, že se všichni zúčastnění budou chovat čestně
