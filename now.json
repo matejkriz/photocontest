@@ -18,7 +18,8 @@
       "PROJECT_ID": "@projectid",
       "STORAGE_BUCKET": "@storagebucket",
       "MESSAGING_SENDER_ID": "@messagingsenderid",
-      "APP_ID": "@appid"
+      "APP_ID": "@appid",
+      "MEASUREMENT_ID": "measurementid"
     }
   }
 }
