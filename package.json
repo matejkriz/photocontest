@@ -22,7 +22,7 @@
     "@types/react-image-gallery": "^0.8.4",
     "@zeit/webpack-asset-relocator-loader": "0.5.8",
     "dotenv": "^8.0.0",
-    "firebase": "^6.3.0",
+    "firebase": "^7.5.2",
     "firebaseui": "^4.3.0",
     "formik": "^1.5.8",
     "next": "^9.1.3",

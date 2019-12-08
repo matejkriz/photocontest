@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import firebase from 'firebase/app';
+import 'firebase/analytics';
 
 export type FirebaseType = typeof firebase;
 
@@ -22,6 +23,7 @@ export const Firebase = ({
         appId: process.env.APP_ID,
         measurementId: process.env.MEASUREMENT_ID,
       });
+      firebase.analytics();
       firebaseInitialized.current = firebase;
       // firebaseui needs it on global window object
       window.firebase = firebase;
