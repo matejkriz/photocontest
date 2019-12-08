@@ -16,7 +16,7 @@ export const Gallery = ({ photos }: Props) =>
         items={photos.map(photo => ({
           original: photo.viewFilePath,
           thumbnail: photo.thumbFilePath,
-          description: `${photo.author}: ${photo.description}`,
+          description: photo.description,
         }))}
         infinite={false}
         showPlayButton={false}
