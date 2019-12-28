@@ -39,11 +39,11 @@ const Index = () => {
       <List as="ul">
         <List.Item as="li">
           <strong>Přihlašování fotografií je již spuštěno!</strong> Ukončeno
-          bude <strong>31. 12. 2019</strong>.
+          bude <strong>6. 1. 2020</strong>.
         </List.Item>
         <List.Item as="li">
-          Hlasování bude spuštěno <strong>1. 1. 2020</strong> a ukončeno{' '}
-          <strong>31. 1. 2020</strong>.
+          Hlasování bude spuštěno <strong>7. 1. 2020</strong> a ukončeno{' '}
+          <strong>7. 2. 2020</strong>.
         </List.Item>
         <List.Item as="li">
           Vyhlášení vítězů proběhne v rámci oslav výročí.
@@ -59,6 +59,8 @@ const Index = () => {
         <List.Item as="li">Humor</List.Item>
         <List.Item as="li">Přátelství</List.Item>
       </List>
+      Kategorie chápej volně – zvol tu nejbližší nebo třeba tu, kde cítíš
+      nejmenší konkurenci.
       <Message>
         Fotografie budou hodnoceny vždy v rámci dané kategorie, každá kategorie
         bude mít tedy svého vítěze. Do kategorie Humor můžeš přihlásit i soubor
