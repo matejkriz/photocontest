@@ -62,8 +62,7 @@ const VotingPage = ({ firebase }: Props) => {
           {categories => (
             <>
               <Message info>
-                Hlasování bude spuštěno 1. 1. 2020! Zatím si můžeš prohlížet
-                přihlášené fotografie.
+                Přihlašování fotografií prodlouženo do 6. 1. 2020!
               </Message>
               <Menu tabular stackable inverted>
                 <Menu.Item header>Kategorie:</Menu.Item>
