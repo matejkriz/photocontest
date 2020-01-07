@@ -116,7 +116,10 @@ const VotingPage = ({ firebase }: Props) => {
         <Categories firebase={firebase}>
           {categories => (
             <>
-              <Message info>Hlasování spuštěno!</Message>
+              <Message info>
+                Hlasování spuštěno! Hlasovat můžete do{' '}
+                <strong>31. 1. 2020</strong>
+              </Message>
               <Menu tabular stackable inverted>
                 <Menu.Item header>Kategorie:</Menu.Item>
                 {categories.map(({ key, value, text }) => (
