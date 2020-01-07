@@ -9,11 +9,18 @@ import { FirebaseType } from './Firebase';
 import 'firebase/auth';
 import 'firebase/firestore';
 
+export interface Votes {
+  [categoryKey: string]: {
+    [photoUuid: string]: number;
+  };
+}
+
 export interface User {
   isSignedIn?: boolean;
   email: string;
   name: string;
   uid: string;
+  votes: Votes;
 }
 
 export interface State {
@@ -40,6 +47,8 @@ export enum ActionType {
   progressUpdate = 'progressUpdate',
   photosFetched = 'photosFetched',
   userFetched = 'userFetched',
+  votesFetched = 'votesFetched',
+  votesChanged = 'votesChanged',
   userNameProvided = 'userNameProvided',
 }
 
@@ -74,6 +83,7 @@ export const initialUserState = {
   email: '',
   name: '',
   uid: '',
+  votes: {},
 };
 
 export const initialFileState: File = {
@@ -108,6 +118,29 @@ export const userReducer = (state: State, action: Action) => {
       return {
         ...state.user,
         ...user,
+      };
+    }
+    case ActionType.votesFetched: {
+      const { votes } = action.payload;
+      return {
+        ...state.user,
+        votes: {
+          ...state.user.votes,
+          ...votes,
+        },
+      };
+    }
+    case ActionType.votesChanged: {
+      const { rating, category, photo } = action.payload;
+      return {
+        ...state.user,
+        votes: {
+          ...state.user.votes,
+          [category]: {
+            ...state.user.votes[category],
+            [photo]: rating,
+          },
+        },
       };
     }
     case ActionType.authStateChanged: {

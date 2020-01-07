@@ -18,6 +18,11 @@ const Index = () => {
       <Header as="h2" disabled>
         ...ANEB, HLEDÁ SE FOTKA TŘICETILETÍ
       </Header>
+      <Message info>
+        <Link href="/vote">
+          <a>Hlasování spuštěno!</a>
+        </Link>
+      </Message>
       <Image
         src="/static/skaut.png"
         centered

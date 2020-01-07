@@ -11,7 +11,13 @@ import { AskForAuthorization } from '../components/AskForAuthorization';
 import { Categories } from '../components/Categories';
 import { FirebaseType } from '../components/Firebase';
 import { Gallery } from '../components/Gallery';
-import { useStateValue, Photo } from '../components/StateProvider';
+import {
+  ActionType,
+  useStateValue,
+  Photo,
+  User,
+  Action,
+} from '../components/StateProvider';
 import { groupBy } from '../lib/arrays';
 import { getSafe } from '../lib';
 import { colors } from '../theme/colors';
@@ -45,14 +51,63 @@ async function fetchPhotos(
   forceUpdate({}); // rerender children
 }
 
+async function fetchVotes(
+  { uid }: User,
+  firebase: FirebaseType,
+  dispatch: Dispatch<Action>,
+) {
+  const db = await firebase.firestore();
+  const votingCategoriesRef = db
+    .collection('users')
+    .doc(uid)
+    .collection('votingcategories');
+
+  const votingCategories = await votingCategoriesRef.get();
+  const votes = await votingCategories.docs.reduce(
+    async (votesPromise, { id: category }) => {
+      const votesAcc = await votesPromise;
+      const photosRef = await votingCategoriesRef
+        .doc(category)
+        .collection('photos')
+        .get();
+
+      const photosVotes = await photosRef.docs.reduce(
+        async (photosPromise, photoDoc) => {
+          const photosAcc = await photosPromise;
+          const photo = await photoDoc.data();
+          return {
+            ...photosAcc,
+            [photoDoc.id]: photo.votes,
+          };
+        },
+        Promise.resolve({}),
+      );
+
+      return {
+        ...votesAcc,
+        [category]: { ...photosVotes },
+      };
+    },
+    Promise.resolve({}),
+  );
+
+  dispatch({
+    type: ActionType.votesFetched,
+    payload: {
+      votes,
+    },
+  });
+}
+
 const VotingPage = ({ firebase }: Props) => {
-  const [{ user }] = useStateValue();
+  const [{ user }, dispatch] = useStateValue();
   const [, forceUpdate] = useState();
   const [selectedCategory, selectCategory] = useState();
   const photos = useRef<PhotosByCategory>({});
   useEffect(() => {
     if (firebase && user.isSignedIn) {
       fetchPhotos(firebase, photos, forceUpdate);
+      fetchVotes(user, firebase, dispatch);
     }
   }, [firebase, user.isSignedIn]);
   return (
@@ -61,9 +116,7 @@ const VotingPage = ({ firebase }: Props) => {
         <Categories firebase={firebase}>
           {categories => (
             <>
-              <Message info>
-                Přihlašování fotografií prodlouženo do 6. 1. 2020!
-              </Message>
+              <Message info>Hlasování spuštěno!</Message>
               <Menu tabular stackable inverted>
                 <Menu.Item header>Kategorie:</Menu.Item>
                 {categories.map(({ key, value, text }) => (

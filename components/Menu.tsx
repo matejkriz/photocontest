@@ -51,11 +51,6 @@ const MenuComponent = ({ router, firebase }: Props) => {
           Hlasovat
         </MenuUI.Item>
       </Link>
-      <Link href="/upload" passHref>
-        <MenuUI.Item active={router.pathname.startsWith('/upload')}>
-          Nahrát fotky
-        </MenuUI.Item>
-      </Link>
 
       <MenuUI.Menu position="right">
         {user.isSignedIn && user.name && firebase ? (
