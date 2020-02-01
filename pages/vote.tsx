@@ -117,8 +117,7 @@ const VotingPage = ({ firebase }: Props) => {
           {categories => (
             <>
               <Message info>
-                Hlasování spuštěno! Hlasovat můžete do{' '}
-                <strong>31. 1. 2020</strong>
+                Hlasování ukončeno! Vyhlášení proběhne v rámci oslav výročí.
               </Message>
               <Menu tabular stackable inverted>
                 <Menu.Item header>Kategorie:</Menu.Item>

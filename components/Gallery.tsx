@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Message } from 'semantic-ui-react';
 import ImageGallery from 'react-image-gallery';
-import { Rating } from './Rating';
 import { GalleryStyles } from './GalleryStyles';
 import { Photo } from './StateProvider';
 
@@ -11,8 +10,6 @@ interface Props {
 }
 
 export const Gallery = ({ photos }: Props) => {
-  const [imageIndex, setImageIndex] = useState(0);
-  const photo = photos[imageIndex];
   return photos && photos.length ? (
     <>
       <ImageGallery
@@ -26,8 +23,6 @@ export const Gallery = ({ photos }: Props) => {
         showIndex
         lazyLoad
         thumbnailPosition="top"
-        renderCustomControls={() => !!photo && <Rating photo={photo} />}
-        onSlide={index => setImageIndex(index)}
       />
       <GalleryStyles />
     </>

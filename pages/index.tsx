@@ -19,8 +19,7 @@ const Index = () => {
         ...ANEB, HLEDÁ SE FOTKA TŘICETILETÍ
       </Header>
       <Message info>
-        Hlasování spuštěno! <Link href="/vote">Hlasovat</Link> můžete do{' '}
-        <strong>31. 1. 2020</strong>
+        Hlasování ukončeno! Vyhlášení proběhne v rámci oslav výročí.
       </Message>
       <Image
         src="/static/skaut.png"
@@ -42,10 +41,7 @@ const Index = () => {
       <Header as="h3">TERMÍNY</Header>
       <List as="ul">
         <List.Item as="li">Přihlašování fotografií již skončilo.</List.Item>
-        <List.Item as="li">
-          Hlasování je nyní spuštěno a ukončeno bude{' '}
-          <strong>31. 1. 2020</strong>.
-        </List.Item>
+        <List.Item as="li">Hlasování je již ukončeno.</List.Item>
         <List.Item as="li">
           Vyhlášení vítězů proběhne v rámci oslav výročí.
         </List.Item>
