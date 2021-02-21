@@ -41,14 +41,19 @@ const MenuComponent = ({ router, firebase }: Props) => {
       pointing
       secondary
       stackable
-      inverted={['/vote', '/upload'].includes(router.pathname)}
+      inverted={['/results', '/upload', '/gallery'].includes(router.pathname)}
     >
       <Link href="/" passHref>
         <MenuUI.Item active={router.pathname === '/'}>Pravidla</MenuUI.Item>
       </Link>
-      <Link href="/vote" passHref>
-        <MenuUI.Item active={router.pathname.startsWith('/vote')}>
-          Hlasovat
+      <Link href="/gallery" passHref>
+        <MenuUI.Item active={router.pathname.startsWith('/gallery')}>
+          Galerie
+        </MenuUI.Item>
+      </Link>
+      <Link href="/results" passHref>
+        <MenuUI.Item active={router.pathname.startsWith('/results')}>
+          Výsledky
         </MenuUI.Item>
       </Link>
 

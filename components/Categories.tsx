@@ -9,7 +9,8 @@ import { FirebaseType } from './Firebase';
 
 import 'firebase/firestore';
 
-export type Categories = Array<{ key: string; value: string; text: string }>;
+export type Category = { key: string; value: string; text: string };
+export type Categories = Array<Category>;
 
 async function fetchCategories(
   firebase: FirebaseType,

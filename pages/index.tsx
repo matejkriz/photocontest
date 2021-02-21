@@ -1,13 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 import {
+  Card,
   Container,
   Divider,
   Header,
   List,
   Message,
   Image,
+  Segment,
 } from 'semantic-ui-react';
+import { Winner } from '../components/Winner';
 
 const Index = () => {
   return (
@@ -19,13 +22,68 @@ const Index = () => {
         ...ANEB, HLEDÁ SE FOTKA TŘICETILETÍ
       </Header>
       <Message info>
-        Hlasování ukončeno! Vyhlášení proběhne v rámci oslav výročí.
+        Výsledky zveřejněny! Vyhlášení mělo proběhnout v rámci oslav výročí, ale
+        vzhledem k nuceným odkladům jsme už nechtěli déle čekat.
       </Message>
-      <Image
-        src="/static/skaut.png"
-        centered
-        alt="Skaut s foťákem místo hlavy"
-      />
+      <Header as="h2">VÝSLEDKY</Header>
+      <Segment>
+        <Header as="h3">VÍTĚZOVÉ KATEGORIÍ</Header>
+        Kdo zvítězil v jednotlivých kategoriích se dozvíš odkrytím fotoskautů.
+        Celkové pořadí se dozvíš{' '}
+        <Link href="/results">
+          <a>na záložce s Výsledky.</a>
+        </Link>
+        <Divider hidden />
+        <Card.Group centered>
+          <Winner
+            title="Dobrodružství"
+            image="/static/vitezne/dobrodruzstvi.png"
+            winner="Karel Pašek - Stop."
+            votes="37"
+            description="Zrzek na vyhlídce při Cestě za záhadou - polární výpravě
+                      do Raspenavy v Jizerských horách, Velikonoce 1994. Tato
+                      fotka byla otištěna na titulní straně časopisu Skauting č.
+                      8 1995."
+          />
+          <Winner
+            title="Humor"
+            image="/static/vitezne/humor.png"
+            winner="Flíček"
+            votes="36"
+            description="Velikonoční výprava do Dobrušky, rok 2013. Rekonstrukční foto foceno u klubovny, 2019. Na fotce zleva: Méďa, Můra, Eda, Jára, Ríša"
+          />
+          <Winner
+            title="Přátelství"
+            image="/static/vitezne/pratelstvi.png"
+            winner="Eliška Pašková Teddy"
+            votes="26"
+            description="Výprava skautek do Zbraslavic 1994"
+          />
+          <Winner
+            title="Zlomové okamžiky"
+            image="/static/vitezne/zlomove_okamziky.png"
+            winner="Luboš Berka"
+            votes="37"
+            description="První středisková velikonoční výprava 1991 – Tanvald."
+          />
+        </Card.Group>
+        <Header as="h3" block>
+          Vítěz každé kategorie vyhrál výtisk fotoknihy vytvořený k výročí 30
+          let Uraganu
+        </Header>
+        <Image src="/static/vyhra.png" centered alt="Fotokniha jako výhra" />
+        <Divider hidden />
+        <Message info>
+          <Header as="h3">
+            Kolik hlasů získaly tvé fotky a jak se umístily tvé oblíbené?
+            <br />
+            <Link href="/results">
+              <a>Koukni na záložku Výsledky.</a>
+            </Link>
+          </Header>
+        </Message>
+      </Segment>
+      <Divider />
       <Header as="h2">PRAVIDLA</Header>
       <Message color="yellow">
         <Message.Header>
