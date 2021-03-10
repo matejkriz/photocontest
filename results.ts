@@ -50,7 +50,7 @@ export const results = {
     },
     {
       uid: '4665ac2b-c2df-43be-9fbf-de09c98e7530',
-      author: 'Flíček ',
+      author: 'Alžběta Křížová – Flíček',
       category: 'dobrodruzstvi',
       description: '2014 Zimní tábor Polana - vaříme oběd ',
       name: '',
@@ -79,7 +79,7 @@ export const results = {
     },
     {
       uid: '5152f4ef-7c59-4c92-840e-cb5ef16f7077',
-      author: 'Flíček',
+      author: 'Alžběta Křížová – Flíček',
       category: 'dobrodruzstvi',
       description:
         'Tábor skautů a skautek, Onšovice 2014. Noční hra, na fotce je Beruška s Kvítkem. ',
@@ -224,7 +224,7 @@ export const results = {
     },
     {
       uid: '002e78e6-c91e-407b-9efd-c17ad7b04036',
-      author: 'Flíček ',
+      author: 'Alžběta Křížová – Flíček',
       category: 'dobrodruzstvi',
       description: 'Jaro 2013, výprava skautek na Kozí Hory. ',
       name: '',
@@ -279,7 +279,7 @@ export const results = {
     },
     {
       uid: 'cc8f9754-c252-40d2-8192-9d6d05d8ec8b',
-      author: 'Flíček ',
+      author: 'Alžběta Křížová – Flíček',
       category: 'dobrodruzstvi',
       description:
         '2015 - tábor v Onšovicích. Hrajeme Safari. Na fotce je Kulíšek a Dejv. ',
@@ -338,7 +338,7 @@ export const results = {
   humor: [
     {
       uid: '835d91eb-7e44-4a89-b2f6-d77d708f2a16',
-      author: 'Flíček ',
+      author: 'Alžběta Křížová – Flíček',
       category: 'humor',
       description:
         'Velikonoční výprava do Dobrušky, rok 2013. Rekonstrukční foto foceno u klubovny, 2019. Na fotce zleva: Méďa, Můra, Eda, Jára, Ríša',
@@ -368,7 +368,7 @@ export const results = {
     },
     {
       uid: 'dc8d7dd8-edb0-4857-8fe0-cfff74dc0c42',
-      author: 'Flíček ',
+      author: 'Alžběta Křížová – Flíček',
       category: 'humor',
       description:
         'Ťapka, Flíček, Slůně. Původní foto z tábora skautů a skautek v Onšovicích. Na druhé fotce s dětmi Mikulášem, Kvídem, Josefínkou. ',
@@ -435,7 +435,7 @@ export const results = {
     },
     {
       uid: 'eebd33a5-669a-4789-a273-89f3cc43d87f',
-      author: 'Flíček ',
+      author: 'Alžběta Křížová – Flíček',
       category: 'humor',
       description: '2010 - Tábor Sk + Sk Vitějovice. Kulíšek jako Rudolf II. ',
       name: '',
@@ -586,7 +586,7 @@ export const results = {
     },
     {
       uid: 'e7f67c11-8e0d-4f21-ac21-da9b3c7f7320',
-      author: 'Flíček ',
+      author: 'Alžběta Křížová – Flíček',
       category: 'pratelstvi',
       description: 'Tábor skautů a skautek Onšovice 2014, večerní zpívání ',
       name: '',
@@ -738,7 +738,7 @@ export const results = {
     },
     {
       uid: 'e29c918a-472b-4f45-a41e-4f824bdf9997',
-      author: 'Flíček',
+      author: 'Alžběta Křížová – Flíček',
       category: 'pratelstvi',
       description: 'Tábor Skautů a Skautek 2016 - Dubliny. Výprava do Sedlčan ',
       name: '',
@@ -918,7 +918,7 @@ export const results = {
     },
     {
       uid: 'ed07d70b-7f41-45ed-b7f8-62956ebccc71',
-      author: 'Flíček',
+      author: 'Alžběta Křížová – Flíček',
       category: 'zlomove_okamziky',
       description: 'Tábor Samá voda - 2011. Druhý den po evakuaci tábořiště. ',
       name: 'DSC_1329.JPG',

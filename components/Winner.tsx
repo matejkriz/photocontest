@@ -25,7 +25,9 @@ export const Winner: React.FC<Props> = ({
           <Image src="/static/vitezne/skaut-h.png" size="medium" />
         </Reveal.Content>
         <Reveal.Content hidden>
-          <Image src={image} size="medium" />
+          <a href={image} target="_blank">
+            <Image src={image} size="medium" />
+          </a>
           <Segment basic>
             <Header as="h4">
               <Icon name="winner" />
