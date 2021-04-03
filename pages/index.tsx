@@ -71,8 +71,15 @@ const Index = () => {
           Vítěz každé kategorie vyhrál výtisk fotoknihy vytvořený k výročí 30
           let Uraganu
         </Header>
+        Prohlédnout si její obsah můžete na odkazu{' '}
         <a
-          href="http://www.uragan-zbraslav.cz/historie/fotokniha/"
+          href="https://www.uragan-zbraslav.cz/historie/fotokniha/"
+          target="_blank"
+        >
+          https://www.uragan-zbraslav.cz/historie/fotokniha/
+        </a>
+        <a
+          href="https://www.uragan-zbraslav.cz/historie/fotokniha/"
           target="_blank"
         >
           <Image src="/static/vyhra.png" centered alt="Fotokniha jako výhra" />
