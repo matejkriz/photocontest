@@ -71,7 +71,10 @@ const Index = () => {
           Vítěz každé kategorie vyhrál výtisk fotoknihy vytvořený k výročí 30
           let Uraganu
         </Header>
-        <a href="http://www.uragan-zbraslav.cz/fotokniha2020/" target="_blank">
+        <a
+          href="http://www.uragan-zbraslav.cz/historie/fotokniha/"
+          target="_blank"
+        >
           <Image src="/static/vyhra.png" centered alt="Fotokniha jako výhra" />
         </a>
         <Divider hidden />
@@ -181,50 +184,14 @@ const Index = () => {
         </List.Item>
       </List>
       <Divider />
-      <Header as="h3">WEB SOUTĚŽE</Header>
-      <List as="ul">
-        <List.Item as="li">
-          Na těchto stránkách bylo možné fotografie do soutěže jak přihlásit,
-          tak hodnotit.
-        </List.Item>
-        <List.Item as="li">
-          Za tímto účelem si prosím{' '}
-          <Link href="/login">
-            <a>zřiď jednoduchý účet</a>
-          </Link>{' '}
-          pod svým vlastním jménem, který bude sloužit i jako ověření, že jsi
-          byl, nebo stále jsi členem střediska.
-        </List.Item>
-      </List>
-      <Divider />
-      <Header as="h3">OSTATNÍ</Header>
-      <List as="ul">
-        <List.Item as="li">
-          Soutěžili jsme o věcné ceny a věčnou slávu!
-        </List.Item>
-        <List.Item as="li">
-          Pokud bys v rámci procházení svého archivu narazil na další zajímavé
-          fotografie, mapující život střediska, které by neměly upadnout v
-          zapomnění a nechtěl jsi je do soutěže přihlásit, předej je prosím co
-          nejdříve Matějovi nebo Flíčkovi. Fotografie budou využity pro účely
-          výstavy a brožury o historii střediska.
-        </List.Item>
-        <List.Item as="li">
-          Není potřeba zdůrazňovat, že se všichni zúčastnění budou chovat čestně
-          a nebudou mít snahu pravidla soutěže obcházet. Vytváření duplicitních
-          účtů, na jméno někoho jiného, s cílem hlasovat víckrát je samozřejmě
-          zakázáno.
-        </List.Item>
-      </List>
-      <Divider />
       <Header as="h3">KONTAKTY</Header>
       <List as="ul">
         <List.Item as="li">Pořadateli soutěže jsou Flíček a Matěj.</List.Item>
         <List.Item as="li">
           Pokud byste měli jakékoliv otázky, neváhejte nás kontaktovat:
           <List.List>
-            <List.Item>Flíček - 607535669, krizova.bety@gmail.com</List.Item>
-            <List.Item>Matěj - 775224369, matej@skaut.cz</List.Item>
+            <List.Item>Flíček - krizova.bety@gmail.com</List.Item>
+            <List.Item>Matěj - matej@skaut.cz</List.Item>
           </List.List>
         </List.Item>
       </List>
